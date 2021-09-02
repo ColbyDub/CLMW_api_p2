@@ -8,6 +8,7 @@ public class Principal {
 
     private String id;
     private String username;
+    private String role;
 
     public Principal() {
         super();
@@ -20,7 +21,7 @@ public class Principal {
     public Principal(Claims jwtClaims) {
         this.id = jwtClaims.getId();
         this.username = jwtClaims.getSubject();
-//        this.role = jwtClaims.get("role", String.class);
+        this.role = jwtClaims.get("role", String.class);
     }
 
     public String getId() {
@@ -39,17 +40,25 @@ public class Principal {
         this.username = username;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Principal principal = (Principal) o;
-        return Objects.equals(id, principal.id) && Objects.equals(username, principal.username);
+        return Objects.equals(id, principal.id) && Objects.equals(username, principal.username) && Objects.equals(role, principal.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username);
+        return Objects.hash(id, username, role);
     }
 
     @Override
@@ -57,7 +66,7 @@ public class Principal {
         return "Principal{" +
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
-
 }
