@@ -17,6 +17,10 @@ public class CoachRepository implements CrudRepository{
         return null;
     }
 
+    public Object findByUsername(String id) {
+        return null;
+    }
+
     @Override
     public Object save(Object newResource) {
         return null;
