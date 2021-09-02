@@ -13,6 +13,7 @@ public class Coach {
 
     public Coach() {
         super();
+        this.players = new String[0][];
     }
 
     public String getCoachName() {
