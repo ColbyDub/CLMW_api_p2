@@ -1,6 +1,5 @@
 package com.revature.teamManager.services;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.data.repos.CoachRepository;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
@@ -25,7 +24,7 @@ public class CoachServiceTestSuite {
     }
 
     @Test
-    public void isValid_returnsTrue_whenGivenValidCourse() {
+    public void isValid_returnsTrue_whenGivenValidCoach() {
         // arrange
         Coach validCoach = new Coach();
         validCoach.setCoachName("Bob");
