@@ -53,12 +53,12 @@ public class Principal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Principal principal = (Principal) o;
-        return Objects.equals(id, principal.id) && Objects.equals(username, principal.username);
+        return Objects.equals(id, principal.id) && Objects.equals(username, principal.username) && Objects.equals(role, principal.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username);
+        return Objects.hash(id, username, role);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Principal {
         return "Principal{" +
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
-
 }

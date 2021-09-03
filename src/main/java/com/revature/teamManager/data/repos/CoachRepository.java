@@ -1,5 +1,6 @@
 package com.revature.teamManager.data.repos;
 
+import com.revature.teamManager.data.documents.Coach;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,8 +18,12 @@ public class CoachRepository implements CrudRepository{
         return null;
     }
 
+    public Coach findByUsername(String id) {
+        return null;
+    }
+
     @Override
-    public Object save(Object newResource) {
+    public Coach save(Object newResource) {
         return null;
     }
 
