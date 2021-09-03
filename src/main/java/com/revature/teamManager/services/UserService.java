@@ -23,17 +23,11 @@ public class UserService {
 
 
     public Principal login(String username, String password, String role){
+
         return null;
     }
 
-    public boolean isUsernameAvailable(String username) {
-
-        if (username == null || username.trim().equals("")) {
-            throw new InvalidRequestException("Invalid email value provided!");
-        }
-
-        return (coachRepo.findCoachByUsername(username) == null);
-    }
+    public boolean isUsernameAvailable(String username) { return (coachRepo.findCoachByUsername(username) == null); }
 
 
     public boolean isUserValid(Coach user) {

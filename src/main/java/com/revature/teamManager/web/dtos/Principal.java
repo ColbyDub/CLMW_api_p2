@@ -1,12 +1,15 @@
 package com.revature.teamManager.web.dtos;
 
+import com.revature.teamManager.data.documents.Coach;
+import com.revature.teamManager.data.documents.Player;
+import com.revature.teamManager.data.documents.Recruiter;
 import io.jsonwebtoken.Claims;
 
 import java.util.Objects;
 
 public class Principal {
 
-    private String id;
+    private String id;      //Needed? ->or use username as unique id
     private String username;
     private String role;
 
@@ -14,9 +17,20 @@ public class Principal {
         super();
     }
 
-//    public Principal(AppUser subject) {
-//
-//    }
+    public Principal(Coach subject) {
+        this.username = subject.getUsername();
+        this.role = "Coach";
+    }
+
+    public Principal(Player subject) {
+        this.username = subject.getUsername();
+        this.role = "Coach";
+    }
+
+    public Principal(Recruiter subject) {
+        this.username = subject.getUsername();
+        this.role = "Coach";
+    }
 
     public Principal(Claims jwtClaims) {
         this.id = jwtClaims.getId();

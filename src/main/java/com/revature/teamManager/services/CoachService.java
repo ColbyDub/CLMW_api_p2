@@ -1,8 +1,12 @@
 package com.revature.teamManager.services;
 
 import com.revature.teamManager.data.documents.Coach;
+import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.repos.CoachRepository;
+import com.revature.teamManager.util.PasswordUtils;
+import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
+import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +14,24 @@ import org.springframework.stereotype.Service;
 public class CoachService {
 
     private CoachRepository coachRepository;
+    private PasswordUtils passwordUtils;
 
     @Autowired
-    public CoachService(CoachRepository coachRepository){
+    public CoachService(CoachRepository coachRepository, PasswordUtils passwordUtils){
         this.coachRepository = coachRepository;
+        this.passwordUtils = passwordUtils;
+    }
+
+    public Principal login(String username, String password){
+
+        String encryptedPassword = passwordUtils.generateSecurePassword(password);
+        Coach authCoach = coachRepository.findCoachByUsernameAndPassword(username,encryptedPassword);
+
+        if(authCoach == null){
+            throw new AuthenticationException("Invlaid credentials provided!");
+        }
+
+        return new Principal(authCoach);
     }
 
     public boolean isValid(Coach coach) {
