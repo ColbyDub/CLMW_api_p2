@@ -1,8 +1,11 @@
 package com.revature.teamManager.data.documents;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Arrays;
 import java.util.Objects;
 
+@Document(collection = "teams")
 public class Coach {
     private String coachName;
     private String username;
