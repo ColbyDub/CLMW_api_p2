@@ -14,26 +14,26 @@ public class UserController {
         this.playerService = playerService;
     }
 
-      @Secured(allowedRoles = {"admin"})
-    @GetMapping(produces = "application/json")
-    public List<AppUserDTO> getAllUsers() {
-        return userService.findAll();
-    }
-
-    @GetMapping(value = "{id}", produces = "application/json")
-    public AppUserDTO getUserById(@PathVariable String id) {
-        return userService.findUserById(id);
-    }
-
-    @GetMapping("/availability")
-    public AvailabilityStatus checkAvailability(@RequestParam String field, @RequestParam String value) {
-        return userService.determineAvailability(field, value);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Principal registerNewUser(@RequestBody AppUser newUser) {
-        return new Principal(userService.register(newUser));
-    }
+//      @Secured(allowedRoles = {"admin"})
+//    @GetMapping(produces = "application/json")
+//    public List<AppUserDTO> getAllUsers() {
+//        return userService.findAll();
+//    }
+//
+//    @GetMapping(value = "{id}", produces = "application/json")
+//    public AppUserDTO getUserById(@PathVariable String id) {
+//        return userService.findUserById(id);
+//    }
+//
+//    @GetMapping("/availability")
+//    public AvailabilityStatus checkAvailability(@RequestParam String field, @RequestParam String value) {
+//        return userService.determineAvailability(field, value);
+//    }
+//
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Principal registerNewUser(@RequestBody AppUser newUser) {
+//        return new Principal(userService.register(newUser));
+//    }
 
 }
