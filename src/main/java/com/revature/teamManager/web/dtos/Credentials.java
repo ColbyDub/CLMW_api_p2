@@ -9,8 +9,6 @@ public class Credentials {
 
     private String password;
 
-    private String role;
-
     public Credentials() {
         super();
     }
@@ -29,14 +27,6 @@ public class Credentials {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     @Override
