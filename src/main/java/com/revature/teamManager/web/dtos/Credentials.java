@@ -4,8 +4,11 @@ import java.util.Objects;
 
 public class Credentials {
 
+
     private String username;
+
     private String password;
+
     private String role;
 
     public Credentials() {
