@@ -25,7 +25,7 @@ public class CoachService {
         if (coach.getPassword().length() < 8) {
             throw new InvalidRequestException("Your password must be at least 8 characters long");
         }
-        if (coachRepository.findByUsername(coach.getUsername()) != null) {
+        if (coachRepository.findCoachByUsername(coach.getUsername()) != null) {
             throw new InvalidRequestException("That username is already taken");
         }
         return true;

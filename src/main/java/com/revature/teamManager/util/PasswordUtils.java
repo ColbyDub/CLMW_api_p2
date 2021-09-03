@@ -6,17 +6,15 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Properties;
-import java.util.Random;
 
 @Component
 public class PasswordUtils {
 
-    @Value("${salt}")
+    @Value("${encrypt.salt}")
     private String salt;
 
 
@@ -24,7 +22,7 @@ public class PasswordUtils {
         Properties appProperties = new Properties();
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            appProperties.load(loader.getResourceAsStream("application.properties"));
+            appProperties.load(loader.getResourceAsStream("application.yml"));
             this.salt = appProperties.getProperty("salt");
             if (salt == null) throw new IllegalStateException("No salt found for password encryption.");
         } catch(Exception e) {
