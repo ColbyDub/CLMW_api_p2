@@ -14,14 +14,4 @@ public class AppDriver {
         SpringApplication.run(AppDriver.class, args);
     }
 
-//    @Bean
-//    public ObjectMapper objectMapper() {
-//        return new ObjectMapper().findAndRegisterModules();
-//    }
-//
-//    @Bean
-//    public PasswordUtils passwordUtils() {
-//        return new PasswordUtils();
-//    }
-
 }

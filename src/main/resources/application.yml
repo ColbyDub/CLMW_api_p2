@@ -6,13 +6,13 @@ server:
 spring:
   application:
     name: team-manager
-  data:
-    mongodb:
-      host: 3.143.144.114
-      port: 27017
-      database: project2
-      username: revature
-      password: team
+data:
+  mongodb:
+    host: 3.143.144.114
+    port: 27017
+    database: project2
+    username: revature
+    password: team
 
 encrypt:
   salt: potato
