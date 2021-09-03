@@ -38,14 +38,14 @@ public class CoachServiceTestSuite {
         validCoach.setPassword("password");
         validCoach.setSport("Basketball");
         validCoach.setTeamName("Fighting TypeScripts");
-        when(mockCoachRepo.findByUsername(any())).thenReturn(null);
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
 
         // act
         boolean actualResult = sut.isValid(validCoach);
 
         // assert
         assertTrue("Expected coach to be considered valid",actualResult);
-        verify(mockCoachRepo,times(1)).findByUsername(any());
+        verify(mockCoachRepo,times(1)).findCoachByUsername(any());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class CoachServiceTestSuite {
 
         assertEquals("Invalid user data provided!", e.getMessage());
 
-        verify(mockCoachRepo, times(0)).findByUsername(any());
+        verify(mockCoachRepo, times(0)).findCoachByUsername(any());
 
     }
 
@@ -85,7 +85,7 @@ public class CoachServiceTestSuite {
         assertEquals("Invlaid user data provided!", e.getMessage());
 
         // assert
-        verify(mockCoachRepo,times(0)).findByUsername(any());
+        verify(mockCoachRepo,times(0)).findCoachByUsername(any());
 
     }
 
@@ -98,7 +98,7 @@ public class CoachServiceTestSuite {
         invalidCoach.setPassword("password");
         invalidCoach.setSport("Basketball");
         invalidCoach.setTeamName("Fighting TypeScripts");
-        when(mockCoachRepo.findByUsername(any())).thenReturn(invalidCoach);
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(invalidCoach);
 
         // act
 
@@ -107,7 +107,7 @@ public class CoachServiceTestSuite {
         assertEquals("Invalid user data provided!", e.getMessage());
 
             // assert
-            verify(mockCoachRepo, times(1)).findByUsername(invalidCoach.getUsername());
+            verify(mockCoachRepo, times(1)).findCoachByUsername(invalidCoach.getUsername());
 
     }
 
@@ -126,7 +126,7 @@ public class CoachServiceTestSuite {
 
         assertEquals("Invalid user data provided!", e.getMessage());
 
-        verify(mockCoachRepo,times(0)).findByUsername(any());
+        verify(mockCoachRepo,times(0)).findCoachByUsername(any());
 
     }
 
@@ -146,7 +146,7 @@ public class CoachServiceTestSuite {
         assertEquals("Invalid user data provided!", e.getMessage());
 
         // assert
-        verify(mockCoachRepo,times(0)).findByUsername(any());
+        verify(mockCoachRepo,times(0)).findCoachByUsername(any());
 
     }
 
@@ -166,7 +166,7 @@ public class CoachServiceTestSuite {
         assertEquals("Invalid user data provided!", e.getMessage());
 
         // assert
-        verify(mockCoachRepo,times(0)).findByUsername(any());
+        verify(mockCoachRepo,times(0)).findCoachByUsername(any());
 
     }
 
@@ -186,7 +186,7 @@ public class CoachServiceTestSuite {
         assertEquals("Invalid user data provided!", e.getMessage());
 
         // assert
-        verify(mockCoachRepo,times(0)).findByUsername(any());
+        verify(mockCoachRepo,times(0)).findCoachByUsername(any());
 
     }
 
@@ -200,7 +200,7 @@ public class CoachServiceTestSuite {
         validCoach.setSport("Basketball");
         validCoach.setTeamName("Fighting TypeScripts");
         when(mockCoachRepo.save(any())).thenReturn(validCoach);
-        when(mockCoachRepo.findByUsername(any())).thenReturn(null);
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
 
         // act
         Coach actualResult = sut.register(validCoach);
@@ -220,14 +220,14 @@ public class CoachServiceTestSuite {
         invalidCoach.setSport("Basketball");
         invalidCoach.setTeamName("Fighting TypeScripts");
         when(mockCoachRepo.save(any())).thenReturn(invalidCoach);
-        when(mockCoachRepo.findByUsername(any())).thenReturn(null);
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
 
         Coach actualResult = sut.register(invalidCoach);
         // act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.register(invalidCoach));
 
         //Assert throws?
-        
+
         // assert
         assertEquals(null,actualResult);
     }
