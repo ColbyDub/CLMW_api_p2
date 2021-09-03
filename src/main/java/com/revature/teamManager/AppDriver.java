@@ -1,15 +1,18 @@
-package com.revature.teamManager.config;
+package com.revature.teamManager;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 
-@ComponentScan("com.revature.teamManager")
-@PropertySource("classpath:application.properties")
-@Import({AspectConfig.class, WebConfig.class, DataConfig.class})
-public class AppConfig {
+@SpringBootApplication
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableMongoRepositories(basePackages = "com.revature.teamManager.data.repos")
+public class AppDriver {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AppDriver.class, args);
+    }
 
 //    @Bean
 //    public ObjectMapper objectMapper() {
