@@ -1,5 +1,6 @@
 package com.revature.teamManager.web.util;
 
+import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.util.exceptions.ResourceNotFoundException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
@@ -12,6 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorResponseAspect {
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleAuthenticationException(AuthenticationException e){
+        return new ErrorResponse(401, e.getMessage());
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)

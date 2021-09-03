@@ -8,6 +8,7 @@ public class Principal {
 
     private String id;
     private String username;
+    private String role;
 
     public Principal() {
         super();
@@ -20,7 +21,7 @@ public class Principal {
     public Principal(Claims jwtClaims) {
         this.id = jwtClaims.getId();
         this.username = jwtClaims.getSubject();
-//        this.role = jwtClaims.get("role", String.class);
+        this.role = jwtClaims.get("role", String.class);
     }
 
     public String getId() {
@@ -37,6 +38,14 @@ public class Principal {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
