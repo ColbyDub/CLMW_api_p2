@@ -27,6 +27,6 @@ public class PlayerService {
             throw new AuthenticationException("Invlaid credentials provided!");
         }
 
-        return null;
+        return new Principal(authPlayer);
     }
 }
