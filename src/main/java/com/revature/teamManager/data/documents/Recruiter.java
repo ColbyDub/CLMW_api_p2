@@ -14,6 +14,8 @@ public class Recruiter {
         this.password = password;
     }
 
+    public Recruiter(){}
+
     public String getName() {
         return name;
     }
