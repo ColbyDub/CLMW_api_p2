@@ -3,7 +3,9 @@ package com.revature.teamManager.services;
 import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.data.repos.CoachRepository;
 import com.revature.teamManager.util.PasswordUtils;
+import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
+import com.revature.teamManager.web.dtos.Principal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -232,5 +234,42 @@ public class CoachServiceTestSuite {
 
         // assert
         assertEquals(null,actualResult);
+    }
+
+    @Test
+    public void login_returnsSuccessfully_whenGivenValidCredentials() {
+        // Arrange
+        Coach validCoach = new Coach();
+        validCoach.setUsername("valid");
+        validCoach.setPassword("valid");
+        validCoach.setCoachName("valid");
+        validCoach.setSport("valid");
+        validCoach.setTeamName("valid");
+
+        Principal expectedResult = new Principal();
+        expectedResult.setUsername("valid");
+        expectedResult.setRole("Coach");
+
+        when(mockCoachRepo.findCoachByUsernameAndPassword(any(), any())).thenReturn(validCoach);
+
+        // Act
+        Principal actualResult = sut.login("valid", "valid");
+
+        // Assert
+        assertEquals(expectedResult, actualResult);
+        verify(mockCoachRepo, times(1)).findCoachByUsernameAndPassword(any(), any());
+    }
+
+    @Test
+    public void login_throwsAuthenticationException_whenGivenInvalidCredentials() {
+        // Arrange
+        when(mockCoachRepo.findCoachByUsernameAndPassword(any(),any())).thenReturn(null);
+
+        // Act
+        AuthenticationException ae = assertThrows(AuthenticationException.class, () -> sut.login("invalid", "invalid"));
+
+        // Assert
+        assertEquals("Invalid username/password combo", ae.getMessage());
+        verify(mockCoachRepo, times(1)).findCoachByUsernameAndPassword(any(), any());
     }
 }
