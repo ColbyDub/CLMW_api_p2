@@ -24,12 +24,12 @@ public class Principal {
 
     public Principal(Player subject) {
         this.username = subject.getUsername();
-        this.role = "Coach";
+        this.role = "Player";
     }
 
     public Principal(Recruiter subject) {
         this.username = subject.getUsername();
-        this.role = "Coach";
+        this.role = "Recruiter";
     }
 
     public Principal(Claims jwtClaims) {
