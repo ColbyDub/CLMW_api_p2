@@ -3,6 +3,7 @@ package com.revature.teamManager.services;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.data.repos.CoachRepository;
+import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +18,13 @@ public class CoachServiceTestSuite {
     CoachService sut;
 
     private CoachRepository mockCoachRepo;
+    private PasswordUtils passwordUtils;
 
     @BeforeEach
     public void beforeEachTest() {
         mockCoachRepo = mock(CoachRepository.class);
-        sut = new CoachService(mockCoachRepo);
+        passwordUtils = mock(PasswordUtils.class);
+        sut = new CoachService(mockCoachRepo, passwordUtils);
     }
 
     @AfterEach
