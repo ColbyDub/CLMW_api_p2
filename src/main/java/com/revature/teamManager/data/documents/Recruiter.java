@@ -1,7 +1,10 @@
 package com.revature.teamManager.data.documents;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Objects;
 
+@Document(collection = "recruiters")
 public class Recruiter {
 
     private String name;
