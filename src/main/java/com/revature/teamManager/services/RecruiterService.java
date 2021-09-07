@@ -8,7 +8,9 @@ import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.web.dtos.Principal;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RecruiterService {
     private RecruiterRepository recruiterRepository;
     private PasswordUtils passwordUtils;
@@ -30,10 +32,13 @@ public class RecruiterService {
     }
 
     public Recruiter register(Recruiter recruiter) {
-        if (isValid(recruiter)) {
-            return recruiterRepository.save(recruiter);
+        if (!isValid(recruiter)) {
+            return null;
         }
-        return null;
+
+        String encryptedPass = passwordUtils.generateSecurePassword(recruiter.getPassword());
+
+        return recruiterRepository.save(new Recruiter(recruiter.getName(), recruiter.getUsername(), encryptedPass));
     }
 
     public boolean isValid(Recruiter recruiter) {
