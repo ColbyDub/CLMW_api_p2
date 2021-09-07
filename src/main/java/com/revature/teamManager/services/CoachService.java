@@ -53,6 +53,7 @@ public class CoachService {
 
     public Coach register(Coach coach) {
         if (isValid(coach)) {
+            coach.setPassword(passwordUtils.generateSecurePassword(coach.getPassword()));
             return coachRepository.save(coach);
         }
         return null;
