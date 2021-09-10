@@ -4,6 +4,8 @@ import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.repos.PlayerRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
+import com.revature.teamManager.util.exceptions.InvalidRequestException;
+import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
 import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,28 @@ public class PlayerService {
     public PlayerService(PlayerRepository playerRepository, PasswordUtils passwordUtils){
         this.playerRepository = playerRepository;
         this.passwordUtils = passwordUtils;
+    }
+
+    public boolean isValid(Player player){
+
+        if(player.getName() == "" || player.getUsername() == "" || player.getPassword() == "" || player.getPassword().length() <= 7){
+            throw new InvalidRequestException("invalid user data");
+        }
+
+        if(playerRepository.findPlayerByUsername(player.getUsername()) != null){
+            throw new ResourcePersistenceException("username is taken");
+        }
+
+        return true;
+    }
+
+    public Player register(Player player){
+
+        if(isValid(player) == true){
+            return playerRepository.save(player);
+
+        }
+        return null;
     }
 
     public Principal login(String username, String password){
