@@ -1,10 +1,11 @@
 package com.revature.teamManager.services;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.data.repos.CoachRepository;
 import com.revature.teamManager.util.PasswordUtils;
+import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
+import com.revature.teamManager.web.dtos.Principal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class CoachServiceTestSuite {
     }
 
     @Test
-    public void isValid_returnsTrue_whenGivenValidCourse() {
+    public void isValid_returnsTrue_whenGivenValidCoach() {
         // arrange
         Coach validCoach = new Coach();
         validCoach.setCoachName("Bob");
@@ -65,7 +66,7 @@ public class CoachServiceTestSuite {
 
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(invalidCoach));
 
-        assertEquals("Invalid user data provided!", e.getMessage());
+        assertEquals("You must provide all necessary information", e.getMessage());
 
         verify(mockCoachRepo, times(0)).findCoachByUsername(any());
 
@@ -85,7 +86,7 @@ public class CoachServiceTestSuite {
 
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(invalidCoach));
 
-        assertEquals("Invlaid user data provided!", e.getMessage());
+        assertEquals("You must provide all necessary information", e.getMessage());
 
         // assert
         verify(mockCoachRepo,times(0)).findCoachByUsername(any());
@@ -107,7 +108,7 @@ public class CoachServiceTestSuite {
 
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(invalidCoach));
 
-        assertEquals("Invalid user data provided!", e.getMessage());
+        assertEquals("That username is already taken", e.getMessage());
 
             // assert
             verify(mockCoachRepo, times(1)).findCoachByUsername(invalidCoach.getUsername());
@@ -127,7 +128,7 @@ public class CoachServiceTestSuite {
         // act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(invalidCoach));
 
-        assertEquals("Invalid user data provided!", e.getMessage());
+        assertEquals("You must provide all necessary information", e.getMessage());
 
         verify(mockCoachRepo,times(0)).findCoachByUsername(any());
 
@@ -146,7 +147,7 @@ public class CoachServiceTestSuite {
         // act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(invalidCoach));
 
-        assertEquals("Invalid user data provided!", e.getMessage());
+        assertEquals("Your password must be at least 8 characters long", e.getMessage());
 
         // assert
         verify(mockCoachRepo,times(0)).findCoachByUsername(any());
@@ -166,7 +167,7 @@ public class CoachServiceTestSuite {
         // act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(invalidCoach));
 
-        assertEquals("Invalid user data provided!", e.getMessage());
+        assertEquals("You must provide all necessary information", e.getMessage());
 
         // assert
         verify(mockCoachRepo,times(0)).findCoachByUsername(any());
@@ -186,7 +187,7 @@ public class CoachServiceTestSuite {
         // act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(invalidCoach));
 
-        assertEquals("Invalid user data provided!", e.getMessage());
+        assertEquals("You must provide all necessary information", e.getMessage());
 
         // assert
         verify(mockCoachRepo,times(0)).findCoachByUsername(any());
@@ -214,25 +215,40 @@ public class CoachServiceTestSuite {
     }
 
     @Test
-    public void register_returnsNull_whenCoachNotValid() {
-        // arrange
-        Coach invalidCoach = new Coach();
-        invalidCoach.setCoachName("");
-        invalidCoach.setUsername("Bobby");
-        invalidCoach.setPassword("password");
-        invalidCoach.setSport("Basketball");
-        invalidCoach.setTeamName("Fighting TypeScripts");
-        when(mockCoachRepo.save(any())).thenReturn(invalidCoach);
-        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
+    public void login_returnsSuccessfully_whenGivenValidCredentials() {
+        // Arrange
+        Coach validCoach = new Coach();
+        validCoach.setUsername("valid");
+        validCoach.setPassword("valid");
+        validCoach.setCoachName("valid");
+        validCoach.setSport("valid");
+        validCoach.setTeamName("valid");
 
-        Coach actualResult = sut.register(invalidCoach);
-        // act
-        InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.register(invalidCoach));
+        Principal expectedResult = new Principal();
+        expectedResult.setUsername("valid");
+        expectedResult.setRole("Coach");
 
-        //Assert throws?
+        when(mockCoachRepo.findCoachByUsernameAndPassword(any(), any())).thenReturn(validCoach);
 
-        // assert
-        assertEquals(null,actualResult);
+        // Act
+        Principal actualResult = sut.login("valid", "valid");
+
+        // Assert
+        assertEquals(expectedResult, actualResult);
+        verify(mockCoachRepo, times(1)).findCoachByUsernameAndPassword(any(), any());
+    }
+
+    @Test
+    public void login_throwsAuthenticationException_whenGivenInvalidCredentials() {
+        // Arrange
+        when(mockCoachRepo.findCoachByUsernameAndPassword(any(),any())).thenReturn(null);
+
+        // Act
+        AuthenticationException ae = assertThrows(AuthenticationException.class, () -> sut.login("invalid", "invalid"));
+
+        // Assert
+        assertEquals("Invalid username/password combo", ae.getMessage());
+        verify(mockCoachRepo, times(1)).findCoachByUsernameAndPassword(any(), any());
     }
 
     @Test
