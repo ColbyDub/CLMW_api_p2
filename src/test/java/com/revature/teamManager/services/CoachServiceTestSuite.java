@@ -234,4 +234,9 @@ public class CoachServiceTestSuite {
         // assert
         assertEquals(null,actualResult);
     }
+
+    @Test
+    void offer_returnsSuccessful_whenValidCoachAndPlayer(){
+
+    }
 }
