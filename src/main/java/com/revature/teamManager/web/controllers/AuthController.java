@@ -29,11 +29,11 @@ public class AuthController {
     }
 
     @PostMapping(value="/coach",consumes = "application/json")
-    public @ResponseBody String authenticateCoach(@RequestBody Credentials creds, HttpServletResponse resp) {
+    public @ResponseBody Principal authenticateCoach(@RequestBody Credentials creds, HttpServletResponse resp) {
         Principal principal = coachService.login(creds.getUsername(), creds.getPassword());
         String token = tokenGenerator.createToken(principal);
         resp.setHeader(tokenGenerator.getJwtConfig().getHeader(), token);
-        return principal.toString();
+        return principal;
     }
 
 }
