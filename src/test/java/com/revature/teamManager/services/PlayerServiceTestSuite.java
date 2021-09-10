@@ -4,8 +4,10 @@ import ch.qos.logback.core.spi.FilterReply;
 import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.repos.PlayerRepository;
 import com.revature.teamManager.util.PasswordUtils;
+import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
+import com.revature.teamManager.web.dtos.Principal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,12 +21,13 @@ public class PlayerServiceTestSuite {
     PlayerService sut;
 
     private PlayerRepository mockPlayerRepo;
-    private PasswordUtils passwordUtils;
+    private PasswordUtils mockPasswordUtils;
 
     @BeforeEach
     public void beforeEachTest(){
         mockPlayerRepo = mock(PlayerRepository.class);
-        sut = new PlayerService(mockPlayerRepo, passwordUtils);
+        mockPasswordUtils = mock(PasswordUtils.class);
+        sut = new PlayerService(mockPlayerRepo, mockPasswordUtils);
     }
 
     @AfterEach
@@ -32,6 +35,8 @@ public class PlayerServiceTestSuite {
         sut = null;
     }
 
+
+    //isValid tests
     @Test
     public void isValid_returnsTrue_whenGivenValidValues(){
         //arrange
@@ -118,12 +123,15 @@ public class PlayerServiceTestSuite {
 
     }
 
+
+    //register tests
     @Test()
     public void register_returnsPlayerAndCallsBothApplicableRepoMethods_whenGivenValidValues(){
         //arrange
         Player player = new Player("name", "username", "password");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(null);
         when(mockPlayerRepo.save(any())).thenReturn(player);
+        when(mockPasswordUtils.generateSecurePassword(any())).thenReturn("password");
 
         //act
         Player result = sut.register(player);
@@ -132,7 +140,37 @@ public class PlayerServiceTestSuite {
         assertEquals(player, result);
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
         verify(mockPlayerRepo, times(1)).save(any());
+        verify(mockPasswordUtils, times(1)).generateSecurePassword( any());
 
+    }
+
+    //login tests
+    @Test
+    public void login_returnsPrinciple_whenGivenValidData(){
+        Player player = new Player();
+        Principal principal = new Principal(player);
+        when(mockPlayerRepo.findPlayerByUsernameAndPassword(any(), any())).thenReturn(player);
+        when(mockPasswordUtils.generateSecurePassword(any())).thenReturn("password");
+
+        Principal result = sut.login("username", "password");
+
+        assertEquals(principal, result);
+        verify(mockPlayerRepo, times(1)).findPlayerByUsernameAndPassword(any(), any());
+        verify(mockPasswordUtils, times(1)).generateSecurePassword( any());
+    }
+
+    @Test
+    public void login_throwsAuthenticationException_whenGivenInvalidValues(){
+
+        Player player = new Player();
+        when(mockPlayerRepo.findPlayerByUsernameAndPassword(any(), any())).thenReturn(null);
+        when(mockPasswordUtils.generateSecurePassword(any())).thenReturn("password");
+
+        AuthenticationException e = assertThrows(AuthenticationException.class, () -> sut.login("username", "password"));
+
+        assertEquals("Invalid login credentials", e.getMessage());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsernameAndPassword(any(), any());
+        verify(mockPasswordUtils, times(1)).generateSecurePassword( any());
     }
 
 }
