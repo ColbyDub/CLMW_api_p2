@@ -28,7 +28,7 @@ public class CoachService {
         Coach authCoach = coachRepository.findCoachByUsernameAndPassword(username,encryptedPassword);
 
         if(authCoach == null){
-            throw new AuthenticationException("Invlaid credentials provided!");
+            throw new AuthenticationException("Invalid credentials provided!");
         }
 
         return new Principal(authCoach);

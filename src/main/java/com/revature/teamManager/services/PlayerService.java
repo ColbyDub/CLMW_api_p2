@@ -1,5 +1,6 @@
 package com.revature.teamManager.services;
 
+import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.repos.PlayerRepository;
 import com.revature.teamManager.util.PasswordUtils;
@@ -35,6 +36,8 @@ public class PlayerService {
 
     public Player register(Player player){
 
+        player.setPassword(passwordUtils.generateSecurePassword(player.getPassword()));
+
         if(isValid(player) == true){
             return playerRepository.save(player);
 
@@ -42,17 +45,18 @@ public class PlayerService {
         return null;
     }
 
-    /*public Principal login(String username, String password){
+    public Principal login(String username, String password){
 
         String encryptedPassword = passwordUtils.generateSecurePassword(password);
-        Player authPlayer = playerRepository.findPlayerByUsernameAndPassword(username,encryptedPassword);
+        Player authPlayer = playerRepository.findPlayerByUsernameAndPassword(username, encryptedPassword);
 
         if(authPlayer == null){
-            throw new AuthenticationException("Invlaid credentials provided!");
+            throw new AuthenticationException("Invalid login credentials");
         }
 
+        return new Principal(authPlayer);
+    }
 
-        return null;
-    }*/
+
 
 }
