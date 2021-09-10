@@ -28,7 +28,7 @@ public class CoachService {
         Coach authCoach = coachRepository.findCoachByUsernameAndPassword(username,encryptedPassword);
 
         if(authCoach == null){
-            throw new AuthenticationException("Invalid credentials provided!");
+            throw new AuthenticationException("Invalid username/password combo");
         }
 
         return new Principal(authCoach);
@@ -53,6 +53,7 @@ public class CoachService {
 
     public Coach register(Coach coach) {
         if (isValid(coach)) {
+            coach.setPassword(passwordUtils.generateSecurePassword(coach.getPassword()));
             return coachRepository.save(coach);
         }
         return null;
