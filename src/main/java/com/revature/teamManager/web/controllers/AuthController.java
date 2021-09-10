@@ -2,9 +2,9 @@ package com.revature.teamManager.web.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.teamManager.services.PlayerService;
 import com.revature.teamManager.services.CoachService;
-import com.revature.teamManager.services.RecruiterService;
+import com.revature.teamManager.services.PlayerService;
+import com.revature.teamManager.services.UserService;
 import com.revature.teamManager.web.dtos.Credentials;
 import com.revature.teamManager.web.dtos.Principal;
 import com.revature.teamManager.web.util.security.TokenGenerator;
@@ -17,42 +17,23 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/auth")
 public class AuthController {
 
+    private final UserService userService;
     private final CoachService coachService;
-    private final RecruiterService recruiterService;
-    private final PlayerService playerService;
     private final TokenGenerator tokenGenerator;
 
     @Autowired
-    public AuthController(CoachService coachService,RecruiterService recruiterService, PlayerService playerService, ObjectMapper mapper, TokenGenerator tokenGenerator) {
+    public AuthController(UserService userService, CoachService coachService, TokenGenerator tokenGenerator) {
+        this.userService = userService;
         this.coachService = coachService;
-        this.recruiterService = recruiterService;
-        this.playerService = playerService;
         this.tokenGenerator = tokenGenerator;
     }
 
     @PostMapping(value="/coach",consumes = "application/json")
-    public @ResponseBody
-    String authenticateUser(@RequestBody Credentials creds, HttpServletResponse resp) {
+    public @ResponseBody Principal authenticateCoach(@RequestBody Credentials creds, HttpServletResponse resp) {
         Principal principal = coachService.login(creds.getUsername(), creds.getPassword());
         String token = tokenGenerator.createToken(principal);
         resp.setHeader(tokenGenerator.getJwtConfig().getHeader(), token);
-        return principal.toString();
-    }
-
-    @PostMapping(value="/recruiter",consumes = "application/json")
-    public @ResponseBody String authenticateRecruiter(@RequestBody Credentials creds, HttpServletResponse resp) {
-        Principal principal = recruiterService.login(creds.getUsername(), creds.getPassword());
-        String token = tokenGenerator.createToken(principal);
-        resp.setHeader(tokenGenerator.getJwtConfig().getHeader(), token);
-        return principal.toString();
-    }
-
-    @PostMapping(value="/player",consumes = "application/json")
-    public @ResponseBody String authenticatePlayer(@RequestBody Credentials creds, HttpServletResponse resp) {
-        Principal principal = playerService.login(creds.getUsername(), creds.getPassword());
-        String token = tokenGenerator.createToken(principal);
-        resp.setHeader(tokenGenerator.getJwtConfig().getHeader(), token);
-        return principal.toString();
+        return principal;
     }
 
 }
