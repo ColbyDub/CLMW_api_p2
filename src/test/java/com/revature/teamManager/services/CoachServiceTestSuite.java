@@ -250,4 +250,9 @@ public class CoachServiceTestSuite {
         assertEquals("Invalid username/password combo", ae.getMessage());
         verify(mockCoachRepo, times(1)).findCoachByUsernameAndPassword(any(), any());
     }
+
+    @Test
+    void offer_returnsSuccessful_whenValidCoachAndPlayer(){
+
+    }
 }
