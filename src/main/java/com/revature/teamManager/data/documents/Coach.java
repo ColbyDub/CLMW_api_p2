@@ -7,6 +7,8 @@ import java.util.Objects;
 
 @Document(collection = "teams")
 public class Coach {
+
+    private String id;
     private String coachName;
     private String username;
     private String password;
@@ -17,6 +19,14 @@ public class Coach {
     public Coach() {
         super();
         this.players = new String[0][];
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCoachName() {
@@ -72,12 +82,12 @@ public class Coach {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coach coach = (Coach) o;
-        return Objects.equals(coachName, coach.coachName) && Objects.equals(username, coach.username) && Objects.equals(password, coach.password) && Objects.equals(teamName, coach.teamName) && Objects.equals(sport, coach.sport) && Arrays.equals(players, coach.players);
+        return Objects.equals(id, coach.id) && Objects.equals(coachName, coach.coachName) && Objects.equals(username, coach.username) && Objects.equals(password, coach.password) && Objects.equals(teamName, coach.teamName) && Objects.equals(sport, coach.sport) && Arrays.equals(players, coach.players);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(coachName, username, password, teamName, sport);
+        int result = Objects.hash(id, coachName, username, password, teamName, sport);
         result = 31 * result + Arrays.hashCode(players);
         return result;
     }
@@ -85,7 +95,8 @@ public class Coach {
     @Override
     public String toString() {
         return "Coach{" +
-                "coachName='" + coachName + '\'' +
+                "id='" + id + '\'' +
+                ", coachName='" + coachName + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", teamName='" + teamName + '\'' +
