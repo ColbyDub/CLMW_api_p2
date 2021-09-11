@@ -255,4 +255,60 @@ public class CoachServiceTestSuite {
     void offer_returnsSuccessful_whenValidCoachAndPlayer(){
 
     }
+
+    @Test
+    public void assignPosition_callsRepositoryMethods_whenGivenValidInformation() {
+        // Arrange
+        String coachUsername = "ValidUsername";
+        String playerUsername = "OtherValidUsername";
+        String position = "ValidPosition";
+        Coach coach = new Coach();
+        coach.setUsername("ValidUsername");
+        coach.setPassword("ValidPassword");
+        coach.setCoachName("ValidCoachName");
+        coach.setSport("Soccer");
+        coach.setTeamName("ValidTeamName");
+        coach.setPlayers(new String[][] {{"OtherValidUsername", "ValidPosition"}});
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(coach);
+        doNothing().when(mockCoachRepo).save(any());
+
+        // Act
+        sut.assignPosition(coachUsername, playerUsername, position);
+
+        // Assert
+        verify(mockCoachRepo, times(1)).findCoachByUsername(any());
+        verify(mockCoachRepo, times(1)).save(any());
+    }
+
+    @Test
+    public void assignPosition_throwsInvalidRequestException_whenGivenEmptyCoachUsername() {
+        // Arrange
+        String coachUsername = "";
+        String playerUsername = "OtherValidUsername";
+        String position = "ValidPosition";
+
+        // Act
+        InvalidRequestException ire = assertThrows(InvalidRequestException.class, () -> sut.assignPosition(coachUsername, playerUsername, position));
+
+        // Assert
+        assertEquals("You must provide a coach username, player username, and position", ire.getMessage());
+        verify(mockCoachRepo, times(0)).findCoachByUsername(any());
+        verify(mockCoachRepo, times(0)).save(any());
+    }
+
+    @Test
+    public void assignPosition_throwsInvalidRequestException_whenGivenEmptyPlayerUsername() {
+        // Arrange
+        String coachUsername = "ValidUsername";
+        String playerUsername = "";
+        String position = "ValidPosition";
+
+        // Act
+        InvalidRequestException ire = assertThrows(InvalidRequestException.class, () -> sut.assignPosition(coachUsername, playerUsername, position));
+
+        // Assert
+        assertEquals("You must provide a coach username, player username, and position", ire.getMessage());
+        verify(mockCoachRepo, times(0)).findCoachByUsername(any());
+        verify(mockCoachRepo, times(0)).save(any());
+    }
 }
