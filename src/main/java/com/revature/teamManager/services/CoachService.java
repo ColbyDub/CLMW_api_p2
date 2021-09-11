@@ -59,4 +59,8 @@ public class CoachService {
         return null;
     }
 
+    public void assignPosition(String coachUsername, String playerUsername, String position) {
+
+    }
+
 }
