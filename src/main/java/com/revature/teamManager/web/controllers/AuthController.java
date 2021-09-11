@@ -19,18 +19,28 @@ public class AuthController {
 
     private final UserService userService;
     private final CoachService coachService;
+    private final PlayerService playerService;
     private final TokenGenerator tokenGenerator;
 
     @Autowired
-    public AuthController(UserService userService, CoachService coachService, TokenGenerator tokenGenerator) {
+    public AuthController(UserService userService, CoachService coachService, TokenGenerator tokenGenerator, PlayerService playerService) {
         this.userService = userService;
         this.coachService = coachService;
         this.tokenGenerator = tokenGenerator;
+        this.playerService = playerService;
     }
 
     @PostMapping(value="/coach",consumes = "application/json")
     public @ResponseBody Principal authenticateCoach(@RequestBody Credentials creds, HttpServletResponse resp) {
         Principal principal = coachService.login(creds.getUsername(), creds.getPassword());
+        String token = tokenGenerator.createToken(principal);
+        resp.setHeader(tokenGenerator.getJwtConfig().getHeader(), token);
+        return principal;
+    }
+
+    @PostMapping(value="/player", consumes = "application/json")
+    public @ResponseBody Principal authenticatePlayer(@RequestBody Credentials creds, HttpServletResponse resp){
+        Principal principal = playerService.login(creds.getUsername(), creds.getPassword());
         String token = tokenGenerator.createToken(principal);
         resp.setHeader(tokenGenerator.getJwtConfig().getHeader(), token);
         return principal;
