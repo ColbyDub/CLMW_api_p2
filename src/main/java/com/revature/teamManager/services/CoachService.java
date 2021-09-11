@@ -10,6 +10,9 @@ import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 @Service
 public class CoachService {
 
@@ -60,7 +63,20 @@ public class CoachService {
     }
 
     public void assignPosition(String coachUsername, String playerUsername, String position) {
+        if (coachUsername == "" || playerUsername == "" || position == "" || coachUsername == null || playerUsername == null || position == null) {
+            throw new InvalidRequestException("You must provide a coach username, player username, and position");
+        }
 
+        Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
+        String[][] players = toUpdate.getPlayers();
+        for (int i = 0; i < players.length; i++) {
+            if (players[i][0] == playerUsername) {
+                players[i][1] = position;
+                break;
+            }
+        }
+        toUpdate.setPlayers(players);
+        coachRepository.save(toUpdate);
     }
 
 }
