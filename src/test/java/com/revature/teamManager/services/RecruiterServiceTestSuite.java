@@ -183,11 +183,11 @@ public class RecruiterServiceTestSuite {
         Principal actualResult = sut.login(validRecruiter.getUsername(),validRecruiter.getPassword());
 
         // assert
+        verify(passwordUtils, times(1)).generateSecurePassword(any());
         verify(mockRecruiterRepo, times(1)).findRecruiterByUsernameAndPassword(
                 validRecruiter.getUsername(),
                 validRecruiter.getPassword());
         assertEquals(new Principal(validRecruiter),actualResult);
     }
-
 
 }
