@@ -10,6 +10,8 @@ import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CoachService {
 
@@ -20,6 +22,21 @@ public class CoachService {
     public CoachService(CoachRepository coachRepository, PasswordUtils passwordUtils){
         this.coachRepository = coachRepository;
         this.passwordUtils = passwordUtils;
+    }
+
+    public Coach addPlayer(String coachUsername, String playerUsername) {
+        Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
+        List<String[]> players = toUpdate.getPlayers();
+        for (String[] s : players) {
+            if (s[0] == playerUsername) {
+                return toUpdate;
+            }
+        }
+        players.add(new String[] {playerUsername, "No Position"});
+        toUpdate.setPlayers(players);
+        coachRepository.save(toUpdate);
+
+        return toUpdate;
     }
 
     public Principal login(String username, String password){
