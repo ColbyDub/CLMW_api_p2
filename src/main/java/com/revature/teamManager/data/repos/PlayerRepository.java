@@ -12,4 +12,9 @@ public interface PlayerRepository extends MongoRepository<Player, String> {
     Player findPlayerByUsernameAndPassword(String username, String password);
     Player findPlayerByUsername(String username);
 
+
+//    Player updatePlayerOffers(String username){
+//        Player
+//    }
+
 }

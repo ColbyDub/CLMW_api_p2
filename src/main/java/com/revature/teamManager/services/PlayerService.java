@@ -6,8 +6,11 @@ import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
+import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PlayerService {
@@ -52,5 +55,16 @@ public class PlayerService {
         }
 
         return new Principal(authPlayer);
+    }
+
+    public Player updateOffers(Offer newOffer){
+
+        Player updateOfferPlayer = playerRepository.findPlayerByUsername(newOffer.getPlayerUsername());
+        List<String> newList = updateOfferPlayer.getOffers();
+        newList.add(newOffer.getCoachUsername());
+        updateOfferPlayer.setOffers(newList);
+        playerRepository.save(updateOfferPlayer);
+
+        return updateOfferPlayer;
     }
 }
