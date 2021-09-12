@@ -4,8 +4,8 @@ package com.revature.teamManager.web.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.teamManager.services.CoachService;
 import com.revature.teamManager.services.PlayerService;
-import com.revature.teamManager.services.CoachService;
 import com.revature.teamManager.services.RecruiterService;
+import com.revature.teamManager.services.UserService;
 import com.revature.teamManager.web.dtos.Credentials;
 import com.revature.teamManager.web.dtos.Principal;
 import com.revature.teamManager.web.util.security.TokenGenerator;
@@ -27,8 +27,8 @@ public class AuthController {
     public AuthController(CoachService coachService,RecruiterService recruiterService, PlayerService playerService, ObjectMapper mapper, TokenGenerator tokenGenerator) {
         this.coachService = coachService;
         this.recruiterService = recruiterService;
-        this.playerService = playerService;
         this.tokenGenerator = tokenGenerator;
+        this.playerService = playerService;
     }
 
     @PostMapping(value="/coach",consumes = "application/json")
