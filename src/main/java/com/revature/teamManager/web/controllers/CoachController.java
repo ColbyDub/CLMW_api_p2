@@ -18,6 +18,12 @@ public class CoachController {
         this.playerService = playerService;
     }
 
+    @GetMapping(value="{username}", produces = "application/json")
+    public Coach getCoach(@PathVariable String username) {
+        Coach coach = coachService.getCoach(username);
+        return coach;
+    }
+
     @PostMapping(produces = "application/json", consumes = "application/json")
     public Coach registerNewCoach(@RequestBody Coach coachCandidate) {
         return coachService.register(coachCandidate);
