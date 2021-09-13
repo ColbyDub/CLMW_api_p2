@@ -25,6 +25,16 @@ public class CoachService {
         this.passwordUtils = passwordUtils;
     }
 
+    public Coach getCoach(String coachUsername) {
+        Coach result = coachRepository.findCoachByUsername(coachUsername);
+
+        if (result == null) {
+            throw new InvalidRequestException("There is not a coach with that username");
+        }
+
+        return result;
+    }
+
     public Coach addPlayer(String coachUsername, String playerUsername) {
         Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
         List<String[]> players = toUpdate.getPlayers();
