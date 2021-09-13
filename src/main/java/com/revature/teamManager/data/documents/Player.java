@@ -11,6 +11,8 @@ public class Player {
     private String name;
     private String username;
     private String password;
+    private String sport;
+	private String teamName;
     private List<String> offers;
     private List<String> exercises;
     private String[][] skills;
@@ -24,11 +26,21 @@ public class Player {
     }
 
     //Only used in unit tests
-    public Player( String name, String username, String password){
+    public Player( String name, String username, String password, String sport) {
         super();
         this.name = name;
         this.username = username;
         this.password = password;
+        this.sport = sport;
+    }
+
+    public Player(String name, String username, String password, String sport, String teamName, List<String> offers) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.sport = sport;
+        this.teamName = teamName;
+        this.offers = offers;
     }
 
     public String getName() {
@@ -86,4 +98,21 @@ public class Player {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getSport() {
+        return sport;
+    }
+
+    public void setSport(String sport) {
+        this.sport = sport;
+    }
+
 }
