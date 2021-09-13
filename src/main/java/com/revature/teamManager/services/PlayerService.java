@@ -7,8 +7,11 @@ import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
+import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PlayerService {
@@ -50,13 +53,40 @@ public class PlayerService {
         String encryptedPassword = passwordUtils.generateSecurePassword(password);
         Player authPlayer = playerRepository.findPlayerByUsernameAndPassword(username, encryptedPassword);
 
-        if(authPlayer == null){
+       if(authPlayer == null){
             throw new AuthenticationException("Invalid login credentials");
         }
 
         return new Principal(authPlayer);
     }
 
+    public Player updateOffers(Offer newOffer){
 
+        Player updateOfferPlayer = playerRepository.findPlayerByUsername(newOffer.getPlayerUsername());
+        List<String> newList = updateOfferPlayer.getOffers();
+        newList.add(newOffer.getCoachUsername());
+        updateOfferPlayer.setOffers(newList);
+        playerRepository.save(updateOfferPlayer);
 
+        return updateOfferPlayer;
+    }
+
+    public void removeOffer(Offer acceptedOffer) {
+        Player removeOfferPlayer = playerRepository.findPlayerByUsername(acceptedOffer.getPlayerUsername());
+        List<String> offers = removeOfferPlayer.getOffers();
+        boolean removed = offers.remove(acceptedOffer.getCoachUsername());
+        if (!removed) {
+            throw new InvalidRequestException("You don't have an offer from that coach");
+        }
+        removeOfferPlayer.setOffers(offers);
+        playerRepository.save(removeOfferPlayer);
+    }
+
+    public Player getPlayerInfo(String username) {
+        Player player = playerRepository.findPlayerByUsername(username);
+
+        if (player == null) { throw new InvalidRequestException("There is no player with that username"); }
+
+        return player;
+    }
 }

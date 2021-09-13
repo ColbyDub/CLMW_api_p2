@@ -2,22 +2,33 @@ package com.revature.teamManager.data.documents;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection = "players")
 public class Player {
+    private String id;
     private String name;
     private String username;
     private String password;
-    private String[] exercises;
-    private String[] offers;
+    private List<String> offers;
+    private List<String> exercises;
     private String[][] skills;
 
-    public Player(String name, String username, String password) {
+    public Player(){
+        super();
+        this.offers = new ArrayList<>();
+        this.exercises = new ArrayList<>();
+        //Max of 5 skills can be changed later
+        this.skills = new String[5][2];
+    }
+
+    //Only used in unit tests
+    public Player( String name, String username, String password){
+        super();
         this.name = name;
         this.username = username;
         this.password = password;
-    }
-
-    public Player() {
     }
 
     public String getName() {
@@ -44,20 +55,12 @@ public class Player {
         this.password = password;
     }
 
-    public String[] getExercises() {
+    public List<String> getExercises() {
         return exercises;
     }
 
-    public void setExercises(String[] exercises) {
+    public void setExercises(List<String> exercises) {
         this.exercises = exercises;
-    }
-
-    public String[] getOffers() {
-        return offers;
-    }
-
-    public void setOffers(String[] offers) {
-        this.offers = offers;
     }
 
     public String[][] getSkills() {
@@ -66,5 +69,21 @@ public class Player {
 
     public void setSkills(String[][] skills) {
         this.skills = skills;
+    }
+
+    public List<String> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<String> offers) {
+        this.offers = offers;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
