@@ -374,4 +374,39 @@ public class CoachServiceTestSuite {
         assertEquals(actualCoach, coach);
 
     }
+
+    @Test
+    public void getCoach_returnsSuccessfully_whenGivenValidUsername() {
+        // Arrange
+        String username = "username";
+        Coach coach = new Coach();
+        coach.setUsername("username");
+        coach.setCoachName("Name");
+        coach.setPassword("password");
+        coach.setSport("sport");
+        coach.setTeamName("Go Team");
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(coach);
+
+        // Act
+        Coach actualCoach = sut.getCoach(username);
+
+        // Assert
+        assertEquals(coach, actualCoach);
+        verify(mockCoachRepo, times(1)).findCoachByUsername(any());
+
+    }
+
+    @Test
+    public void getCoach_throwsInvalidRequestException_whenUsernameNotInDb() {
+        // Arrange
+        String username = "invalidUsername";
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
+
+        // Act
+        InvalidRequestException ire = assertThrows(InvalidRequestException.class, () -> sut.getCoach(username));
+
+        // Assert
+        verify(mockCoachRepo,times(1)).findCoachByUsername(any());
+
+    }
 }
