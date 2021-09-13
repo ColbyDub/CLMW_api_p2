@@ -4,17 +4,33 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "players")
 public class Player {
+    private String id;
     private String name;
     private String username;
     private String password;
     private String[] exercises;
     private String[] offers;
+    private String teamName;
     private String[][] skills;
 
     public Player(String name, String username, String password) {
         this.name = name;
         this.username = username;
         this.password = password;
+
+    public Player() {
+        super();
+    }
+
+    public Player(String name, String username, String password, String teamName, String[] invitations) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.teamName = teamName;
+        this.invitations = invitations;
+    }
+
+    public Player(Player player) {
     }
 
     public String getName() {
@@ -63,5 +79,12 @@ public class Player {
 
     public void setSkills(String[][] skills) {
         this.skills = skills;
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }
