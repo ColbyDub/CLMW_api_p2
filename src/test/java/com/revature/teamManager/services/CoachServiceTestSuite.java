@@ -10,6 +10,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -254,5 +257,59 @@ public class CoachServiceTestSuite {
     @Test
     void offer_returnsSuccessful_whenValidCoachAndPlayer(){
 
+    }
+
+    @Test
+    public void addPlayer_returnsSuccessfully_WhenGivenUsernameAndPassword() {
+        // Arrange
+        Coach coach = new Coach();
+        coach.setCoachName("Bob Bobson");
+        coach.setUsername("Bobby");
+        coach.setPassword("password");
+        coach.setTeamName("Springs");
+        coach.setSport("Basketball");
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(coach);
+
+        Coach updatedCoach = new Coach();
+        updatedCoach.setCoachName("Bob Bobson");
+        updatedCoach.setUsername("Bobby");
+        updatedCoach.setPassword("password");
+        updatedCoach.setTeamName("Springs");
+        updatedCoach.setSport("Basketball");
+        List<String[]> players = new ArrayList<>();
+        players.add(new String[] {"Billy", "No Position"});
+        updatedCoach.setPlayers(players);
+        when(mockCoachRepo.save(any())).thenReturn(null);
+
+        // Act
+        Coach actualCoach = sut.addPlayer("Bobby", "Billy");
+
+        // Assert
+        verify(mockCoachRepo, times(1)).findCoachByUsername(any());
+        verify(mockCoachRepo, times(1)).save(any());
+        assertEquals(actualCoach, updatedCoach);
+    }
+
+    @Test
+    public void addPlayer_doesNotAddPlayer_ifPlayerAlreadyOnTeam() {
+        // Arrange
+        Coach coach = new Coach();
+        coach.setCoachName("Bob Bobson");
+        coach.setUsername("Bobby");
+        coach.setPassword("password");
+        coach.setTeamName("Springs");
+        coach.setSport("Basketball");
+        List<String[]> players = new ArrayList<>();
+        players.add(new String[] {"Billy", "No Position"});
+        coach.setPlayers(players);
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(coach);
+
+        // Act
+        Coach actualCoach = sut.addPlayer("Bobby", "Billy");
+
+        // Assert
+        verify(mockCoachRepo, times(1)).findCoachByUsername(any());
+        verify(mockCoachRepo, times(0)).save(any());
+        assertEquals(actualCoach, coach);
     }
 }

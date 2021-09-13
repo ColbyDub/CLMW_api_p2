@@ -53,7 +53,7 @@ public class PlayerService {
         String encryptedPassword = passwordUtils.generateSecurePassword(password);
         Player authPlayer = playerRepository.findPlayerByUsernameAndPassword(username, encryptedPassword);
 
-        if(authPlayer == null){
+       if(authPlayer == null){
             throw new AuthenticationException("Invalid login credentials");
         }
 
@@ -71,4 +71,22 @@ public class PlayerService {
         return updateOfferPlayer;
     }
 
+    public void removeOffer(Offer acceptedOffer) {
+        Player removeOfferPlayer = playerRepository.findPlayerByUsername(acceptedOffer.getPlayerUsername());
+        List<String> offers = removeOfferPlayer.getOffers();
+        boolean removed = offers.remove(acceptedOffer.getCoachUsername());
+        if (!removed) {
+            throw new InvalidRequestException("You don't have an offer from that coach");
+        }
+        removeOfferPlayer.setOffers(offers);
+        playerRepository.save(removeOfferPlayer);
+    }
+
+    public Player getPlayerInfo(String username) {
+        Player player = playerRepository.findPlayerByUsername(username);
+
+        if (player == null) { throw new InvalidRequestException("There is no player with that username"); }
+
+        return player;
+    }
 }
