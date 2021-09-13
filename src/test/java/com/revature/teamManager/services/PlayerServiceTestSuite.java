@@ -44,7 +44,7 @@ public class PlayerServiceTestSuite {
     @Test
     public void isValid_returnsTrue_whenGivenValidValues(){
         //arrange
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(null);
 
         //act
@@ -59,7 +59,7 @@ public class PlayerServiceTestSuite {
     @Test()
     public void isValid_throwsInvalidRequestException_whenNameIsBlank(){
         //arrange
-        Player player = new Player("", "username", "password");
+        Player player = new Player("", "username", "password", "sport");
 
         //act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(player));
@@ -73,7 +73,7 @@ public class PlayerServiceTestSuite {
     @Test()
     public void isValid_throwsInvalidRequestException_whenUsernameIsBlank(){
         //arrange
-        Player player = new Player("name", "", "password");
+        Player player = new Player("name", "", "password", "sport");
 
         //act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(player));
@@ -87,7 +87,7 @@ public class PlayerServiceTestSuite {
     @Test()
     public void isValid_throwsInvalidRequestException_whenPasswordIsBlank(){
         //arrange
-        Player player = new Player("name", "username", "");
+        Player player = new Player("name", "username", "", "sport");
 
         //act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(player));
@@ -101,7 +101,7 @@ public class PlayerServiceTestSuite {
     @Test()
     public void isValid_throwsInvalidRequestException_whenPasswordIsSevenCharacters(){
         //arrange
-        Player player = new Player("name", "username", "1234567");
+        Player player = new Player("name", "username", "1234567", "sport");
 
         //act
         InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.isValid(player));
@@ -115,7 +115,7 @@ public class PlayerServiceTestSuite {
     @Test()
     public void isValid_throwsResourcePersistenceException_whenUsernameIsTaken(){
         //arrange
-        Player player = new Player("name", "takenUsername", "password");
+        Player player = new Player("name", "takenUsername", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
 
         //act
@@ -132,7 +132,7 @@ public class PlayerServiceTestSuite {
     @Test()
     public void register_returnsPlayerAndCallsBothApplicableRepoMethods_whenGivenValidValues(){
         //arrange
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(null);
         when(mockPlayerRepo.save(any())).thenReturn(player);
         when(mockPasswordUtils.generateSecurePassword(any())).thenReturn("password");
