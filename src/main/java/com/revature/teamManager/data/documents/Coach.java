@@ -3,6 +3,7 @@ package com.revature.teamManager.data.documents;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 
 @Document(collection = "teams")
@@ -12,11 +13,23 @@ public class Coach {
     private String password;
     private String teamName;
     private String sport;
-    private String[][] players;
+    private HashMap <String, String> players;
+
+    public Coach(String coachName, String username, String password, String teamName, String sport) {
+        this.coachName = coachName;
+        this.username = username;
+        this.password = password;
+        this.teamName = teamName;
+        this.sport = sport;
+        this.players = new HashMap<String, String>();
+    }
 
     public Coach() {
+    }
+
+    public Coach(HashMap<String, String> players) {
         super();
-        this.players = new String[0][];
+        this.players = players;
     }
 
     public String getCoachName() {
@@ -59,11 +72,11 @@ public class Coach {
         this.sport = sport;
     }
 
-    public String[][] getPlayers() {
+    public HashMap<String, String> getPlayers() {
         return players;
     }
 
-    public void setPlayers(String[][] players) {
+    public void setPlayers(HashMap<String, String> players) {
         this.players = players;
     }
 
@@ -72,14 +85,12 @@ public class Coach {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coach coach = (Coach) o;
-        return Objects.equals(coachName, coach.coachName) && Objects.equals(username, coach.username) && Objects.equals(password, coach.password) && Objects.equals(teamName, coach.teamName) && Objects.equals(sport, coach.sport) && Arrays.equals(players, coach.players);
+        return Objects.equals(coachName, coach.coachName) && Objects.equals(username, coach.username) && Objects.equals(password, coach.password) && Objects.equals(teamName, coach.teamName) && Objects.equals(sport, coach.sport) && Objects.equals(players, coach.players);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(coachName, username, password, teamName, sport);
-        result = 31 * result + Arrays.hashCode(players);
-        return result;
+        return Objects.hash(coachName, username, password, teamName, sport, players);
     }
 
     @Override
@@ -90,7 +101,7 @@ public class Coach {
                 ", password='" + password + '\'' +
                 ", teamName='" + teamName + '\'' +
                 ", sport='" + sport + '\'' +
-                ", players=" + Arrays.toString(players) +
+                ", players=" + players +
                 '}';
     }
 }
