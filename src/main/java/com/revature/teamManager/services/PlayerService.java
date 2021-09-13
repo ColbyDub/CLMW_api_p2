@@ -12,6 +12,7 @@ import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -46,6 +47,10 @@ public class PlayerService {
 
         }
         return null;
+    }
+	
+	public List<Player> findAll() {
+        return playerRepository.findAll();
     }
 
     public Principal login(String username, String password){

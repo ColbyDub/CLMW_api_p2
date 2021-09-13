@@ -6,6 +6,14 @@ import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.util.security.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+)
+
 @RestController
 @RequestMapping("/players")
 public class PlayerController {
@@ -29,4 +37,10 @@ public class PlayerController {
         return foundPlayer;
     }
 
+}
+	
+	@GetMapping(produces = "application/json")
+	public List<Player> getAllUsers() {
+		return playerService.findAll();
+	}
 }

@@ -13,6 +13,7 @@ public class Player {
     private String password;
     private List<String> offers;
     private List<String> exercises;
+    private String teamName;
     private String[][] skills;
 
     public Player(){
@@ -29,6 +30,20 @@ public class Player {
         this.name = name;
         this.username = username;
         this.password = password;
+
+    public Player() {
+        super();
+    }
+
+    public Player(String name, String username, String password, String teamName, String[] invitations) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.teamName = teamName;
+        this.invitations = invitations;
+    }
+
+    public Player(Player player) {
     }
 
     public String getName() {
@@ -85,5 +100,15 @@ public class Player {
 
     public void setId(String id) {
         this.id = id;
+
+    public void setSkills(String[][] skills) {
+        this.skills = skills;
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }
