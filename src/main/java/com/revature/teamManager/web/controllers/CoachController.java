@@ -4,6 +4,7 @@ import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.services.CoachService;
 import com.revature.teamManager.web.dtos.AssignPositionRequest;
 import com.revature.teamManager.services.PlayerService;
+import com.revature.teamManager.web.dtos.CoachDTO;
 import com.revature.teamManager.web.dtos.Offer;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,10 @@ public class CoachController {
     }
 
     @GetMapping(value="{username}", produces = "application/json")
-    public Coach getCoach(@PathVariable String username) {
+    public CoachDTO getCoach(@PathVariable String username) {
         Coach coach = coachService.getCoach(username);
-        return coach;
+        CoachDTO responseCoach = new CoachDTO(coach);
+        return responseCoach;
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
