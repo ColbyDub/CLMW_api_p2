@@ -11,7 +11,6 @@ public class Player {
     private String name;
     private String username;
     private String password;
-
     private String teamName;
     private String[] invitations;
     private List<String> offers = new ArrayList<String>();
@@ -21,6 +20,12 @@ public class Player {
     private List<Skills> skills = new ArrayList<Skills>();
 
     public Player(){
+        super();
+        this.offers = new ArrayList<>();
+        this.exercises = new ArrayList<>();
+
+        //Max of 5 skills can be changed later
+        //this.skills = new String[5][2];
     }
 
     //Only used in unit tests
@@ -29,6 +34,8 @@ public class Player {
         this.name = name;
         this.username = username;
         this.password = password;
+        this.offers = new ArrayList<>();
+        this.exercises = new ArrayList<>();
         this.sports.add(sport);
     }
 
@@ -41,19 +48,6 @@ public class Player {
         this.offers = offers;
     }
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", offers=" + offers +
-                ", exercises=" + exercises +
-                ", sports=" + sports +
-                ", skills=" + skills +
-                '}';
-    }
 
     public String getId() {
         return id;
@@ -139,4 +133,17 @@ public class Player {
 
     public void setCompletedExercises(List<String> completedExercises) { this.completedExercises = completedExercises; }
 
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", offers=" + offers +
+                ", exercises=" + exercises +
+                ", sports=" + sports +
+                ", skills=" + skills +
+                '}';
+    }
 }
