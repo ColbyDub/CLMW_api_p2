@@ -2,6 +2,7 @@ package com.revature.teamManager.services;
 
 import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.data.documents.Player;
+import com.revature.teamManager.data.documents.Skills;
 import com.revature.teamManager.data.repos.PlayerRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
@@ -69,6 +70,51 @@ public class PlayerService {
         playerRepository.save(updateOfferPlayer);
 
         return updateOfferPlayer;
+    }
+
+    public Player addSkill(String username, String skill){
+        Player player = playerRepository.findPlayerByUsername(username);
+        if(skillValid(player, skill)){
+            Skills skills = new Skills(skill);
+            player.getSkills().add(skills);
+            playerRepository.save(player);
+            return player;
+        }
+        return null;
+    }
+
+    public Player addSport(String username, String sport){
+        Player player = playerRepository.findPlayerByUsername(username);
+        if(sportValid(player, sport)){
+            player.getSports().add(sport);
+            playerRepository.save(player);
+            return player;
+        }
+        return null;
+    }
+
+    public boolean skillValid(Player player, String skill){
+
+        if (skill == ""){
+            throw new InvalidRequestException("Invalid data");
+        }
+        Player check = playerRepository.findPlayerByUsername(player.getUsername());
+        boolean skillExists = check.getSkills().stream().anyMatch(item -> skill.equals(item.getSkill()));
+        if (skillExists){
+            throw new ResourcePersistenceException("Duplicate data");
+        }
+        return true;
+    }
+
+    public boolean sportValid(Player player, String sport){
+        if (sport == ""){
+            throw new InvalidRequestException("Invalid data");
+        }
+        Player check = playerRepository.findPlayerByUsername(player.getUsername());
+        if (check.getSports().contains(sport)){
+            throw new ResourcePersistenceException("Duplicate data");
+        }
+        return true;
     }
 
 }
