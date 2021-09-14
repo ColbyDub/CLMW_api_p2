@@ -10,7 +10,8 @@ import com.revature.teamManager.web.dtos.PlayerDTO;
 import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,15 @@ public class CoachService {
         this.passwordUtils = passwordUtils;
     }
 
+    public Coach getCoach(String coachUsername) {
+        Coach result = coachRepository.findCoachByUsername(coachUsername);
+
+        if (result == null) {
+            throw new InvalidRequestException("There is not a coach with that username");
+        }
+
+        return result;
+    }
 
     public List<String> getTeamPlayers(String username){
         return coachRepository.findCoachByUsername(username).getPlayers()
@@ -84,6 +94,23 @@ public class CoachService {
             return coachRepository.save(coach);
         }
         return null;
+    }
+
+    public void assignPosition(String coachUsername, String playerUsername, String position) {
+        if (coachUsername == "" || playerUsername == "" || position == "" || coachUsername == null || playerUsername == null || position == null) {
+            throw new InvalidRequestException("You must provide a coach username, player username, and position");
+        }
+
+        Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
+        List<String[]> players = toUpdate.getPlayers();
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i)[0].equals(playerUsername)) {
+                players.get(i)[1] = position;
+                break;
+            }
+        }
+        toUpdate.setPlayers(players);
+        coachRepository.save(toUpdate);
     }
 
 }
