@@ -6,6 +6,7 @@ import com.revature.teamManager.web.dtos.AssignPositionRequest;
 import com.revature.teamManager.services.PlayerService;
 import com.revature.teamManager.web.dtos.CoachDTO;
 import com.revature.teamManager.web.dtos.Offer;
+import com.revature.teamManager.web.util.security.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,7 +40,16 @@ public class CoachController {
     @PutMapping(value = "/team", produces = "application/json", consumes = "application/json")
     public Coach addPlayer(@RequestBody Offer accepted) {
         playerService.removeOffer(accepted);
-        Coach updatedCoach = coachService.addPlayer(accepted.getCoachUsername(), accepted.getPlayerUsername());
-        return updatedCoach;
+        return coachService.addPlayer(accepted.getCoachUsername(), accepted.getPlayerUsername());
+    }
+
+
+    @Secured(allowedRoles = "Coach")
+    @PatchMapping(value = "/assign/{username}", produces = "application/json", consumes = "application/json")
+    public void assignWorkout(@RequestBody String exercise, @PathVariable String username){
+        for (String teamPlayer : coachService.getTeamPlayers(username)) {
+            if(!playerService.addExercise(teamPlayer,exercise))
+                System.out.println("Exercise ["+exercise+"] is already assigned to team member ["+teamPlayer+"]");
+        }
     }
 }
