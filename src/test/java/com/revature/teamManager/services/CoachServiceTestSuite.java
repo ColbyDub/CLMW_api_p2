@@ -255,12 +255,10 @@ public class CoachServiceTestSuite {
         verify(mockCoachRepo, times(1)).findCoachByUsernameAndPassword(any(), any());
     }
 
-    @Test
-<<<<<<< HEAD
-=======
-    void offer_returnsSuccessful_whenValidCoachAndPlayer(){
-
-    }
+//    @Test
+//    void offer_returnsSuccessful_whenValidCoachAndPlayer(){
+//
+//    }
 
     @Test
     public void assignPosition_callsRepositoryMethods_whenGivenValidInformation() {
@@ -290,7 +288,6 @@ public class CoachServiceTestSuite {
     }
 
     @Test
->>>>>>> 3edb204e7c0ce2c0f6c5be1fe82331bd91eb2d4b
     public void addPlayer_returnsSuccessfully_WhenGivenUsernameAndPassword() {
         // Arrange
         Coach coach = new Coach();
