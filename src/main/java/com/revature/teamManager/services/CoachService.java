@@ -27,11 +27,8 @@ public class CoachService {
     }
 
 
-    public List<String> getTeamPlayers(String username){
-        return coachRepository.findCoachByUsername(username).getPlayers()
-                .stream()
-                .map(player -> player[0])
-                .collect(Collectors.toList());
+    public List<String[]> getTeamPlayers(String username){
+        return coachRepository.findCoachByUsername(username).getPlayers();
     }
 
     public Coach addPlayer(String coachUsername, String playerUsername) {
