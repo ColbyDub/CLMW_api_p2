@@ -256,4 +256,41 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
     }
 
+    @Test
+    public void addExercise_returnsTrue_WhenExercisesDontHaveAddedOne(){
+        Player player = new Player();
+        player.setName("Bob Bobson");
+        player.setUsername("validUsername");
+        player.setPassword("password");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+
+        boolean check = sut.addExercise("validUsername","Rope jumps");
+
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+
+        assertTrue(null,check);
+
+    }
+
+    @Test
+    public void addExercise_returnsFalse_WhenExercisesContainAddedOne(){
+        Player player = new Player();
+        player.setName("Bob Bobson");
+        player.setUsername("validUsername");
+        player.setPassword("password");
+        List<String> exercises = new ArrayList<>();
+        exercises.add("Rump Jope");
+        player.setExercises(exercises);
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+
+        boolean check = sut.addExercise("validUsername","Rump Jope");
+
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+
+        assertFalse(check);
+
+    }
+
 }
