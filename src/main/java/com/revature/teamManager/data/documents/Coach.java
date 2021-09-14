@@ -9,6 +9,7 @@ import java.util.Objects;
 
 @Document(collection = "teams")
 public class Coach {
+
     private String id;
     private String coachName;
     private String username;
@@ -104,7 +105,8 @@ public class Coach {
     @Override
     public String toString() {
         return "Coach{" +
-                "coachName='" + coachName + '\'' +
+                "id='" + id + '\'' +
+                ", coachName='" + coachName + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", teamName='" + teamName + '\'' +
