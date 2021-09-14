@@ -52,4 +52,11 @@ public class CoachController {
                 System.out.println("Exercise ["+exercise+"] is already assigned to team member ["+teamPlayer+"]");
         }
     }
+
+    @GetMapping(value = "/player/{playerUsername}", produces = "application/json")
+    public CoachDTO findPlayersTeam(@PathVariable String playerUsername) {
+        Coach foundTeam = coachService.getTeamForPlayer(playerUsername);
+        CoachDTO teamDTO = new CoachDTO(foundTeam);
+        return teamDTO;
+    }
 }

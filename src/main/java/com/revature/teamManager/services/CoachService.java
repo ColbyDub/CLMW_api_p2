@@ -113,4 +113,14 @@ public class CoachService {
         coachRepository.save(toUpdate);
     }
 
+    public Coach getTeamForPlayer(String username) {
+        Coach foundTeam = coachRepository.findCoachByPlayersContaining(username);
+
+        if (foundTeam == null) {
+            throw new InvalidRequestException("You aren't on a team");
+        }
+
+        return foundTeam;
+    }
+
 }
