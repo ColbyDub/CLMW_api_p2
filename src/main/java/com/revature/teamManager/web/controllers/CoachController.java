@@ -40,6 +40,7 @@ public class CoachController {
     @PutMapping(value = "/team", produces = "application/json", consumes = "application/json")
     public Coach addPlayer(@RequestBody Offer accepted) {
         playerService.removeOffer(accepted);
+        playerService.addTeam(getCoach(accepted.getCoachUsername()).getTeamName(), accepted.getPlayerUsername());
         return coachService.addPlayer(accepted.getCoachUsername(), accepted.getPlayerUsername());
     }
 
