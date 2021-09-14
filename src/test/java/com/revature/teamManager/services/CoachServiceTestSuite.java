@@ -1,6 +1,7 @@
 package com.revature.teamManager.services;
 
 import com.revature.teamManager.data.documents.Coach;
+import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.repos.CoachRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
@@ -255,6 +256,8 @@ public class CoachServiceTestSuite {
     }
 
     @Test
+<<<<<<< HEAD
+=======
     void offer_returnsSuccessful_whenValidCoachAndPlayer(){
 
     }
@@ -287,6 +290,7 @@ public class CoachServiceTestSuite {
     }
 
     @Test
+>>>>>>> 3edb204e7c0ce2c0f6c5be1fe82331bd91eb2d4b
     public void addPlayer_returnsSuccessfully_WhenGivenUsernameAndPassword() {
         // Arrange
         Coach coach = new Coach();
@@ -409,4 +413,30 @@ public class CoachServiceTestSuite {
         verify(mockCoachRepo,times(1)).findCoachByUsername(any());
 
     }
+
+    @Test
+    public void getTeamPlayers_returnsTeamMembers_WhenGivenValidUsername(){
+        Coach validCoach = new Coach();
+        validCoach.setCoachName("Bob");
+        validCoach.setUsername("Bobby");
+        validCoach.setPassword("password");
+        validCoach.setSport("Basketball");
+        validCoach.setTeamName("Fighting TypeScripts");
+        List<String[]> playerList = new ArrayList();
+        String[] listFill = {"username","center"};
+        playerList.add(listFill);
+        String[] listFill2 = {"player2","point guard"};
+        playerList.add(listFill2);
+        validCoach.setPlayers(playerList);
+
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(validCoach);
+
+        List<String[]> listOPlayers = sut.getTeamPlayers(validCoach.getUsername());
+
+        verify(mockCoachRepo, times(1)).findCoachByUsername(any());
+
+        assertEquals(playerList,listOPlayers);
+
+    }
+
 }
