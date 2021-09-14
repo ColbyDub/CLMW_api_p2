@@ -69,6 +69,13 @@ public class PlayerService {
         return new Principal(authPlayer);
     }
 
+    public Player addTeam(String teamName, String playerUsername)
+    {
+        Player updateOfferPlayer = playerRepository.findPlayerByUsername(playerUsername);
+        updateOfferPlayer.setTeamName(teamName);
+        return playerRepository.save(updateOfferPlayer);
+    }
+
     public Player updateOffers(Offer newOffer, String type){
         Player updateOfferPlayer = playerRepository.findPlayerByUsername(newOffer.getPlayerUsername());
         List<String> newList = updateOfferPlayer.getOffers();

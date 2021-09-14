@@ -255,11 +255,6 @@ public class CoachServiceTestSuite {
         verify(mockCoachRepo, times(1)).findCoachByUsernameAndPassword(any(), any());
     }
 
-//    @Test
-//    void offer_returnsSuccessful_whenValidCoachAndPlayer(){
-//
-//    }
-
     @Test
     public void assignPosition_callsRepositoryMethods_whenGivenValidInformation() {
         // Arrange
@@ -315,7 +310,7 @@ public class CoachServiceTestSuite {
         // Assert
         verify(mockCoachRepo, times(1)).findCoachByUsername(any());
         verify(mockCoachRepo, times(1)).save(any());
-        assertEquals(actualCoach, updatedCoach);
+        assertEquals(actualCoach.getPlayers().get(0)[0], updatedCoach.getPlayers().get(0)[0]);
 
     }
 
@@ -411,6 +406,42 @@ public class CoachServiceTestSuite {
 
     }
 
+    @Test
+    public void getTeamForPlayer_returnsSuccessfully_whenGivenValidUsername() {
+        // Arrange
+        String username = "validUsername";
+        Coach coach = new Coach();
+        coach.setCoachName("Bob Bobson");
+        coach.setUsername("Bobby");
+        coach.setPassword("password");
+        coach.setTeamName("Springs");
+        coach.setSport("Basketball");
+        List<String[]> players = new ArrayList<>();
+        players.add(new String[] {"validUsername", "No Position"});
+        coach.setPlayers(players);
+        when(mockCoachRepo.findCoachByPlayersContaining(any())).thenReturn(coach);
+
+        // Act
+        Coach found = sut.getTeamForPlayer(username);
+
+        // Assert
+        assertEquals(username, found.getPlayers().get(0)[0]);
+        verify(mockCoachRepo,times(1)).findCoachByPlayersContaining(any());
+    }
+
+    @Test
+    public void getTeamForPlayer_throwsInvalidRequestException_whenGivenInvalidUsername() {
+        // Arrange
+        String username = "invalidUsername";
+        when(mockCoachRepo.findCoachByPlayersContaining(any())).thenReturn(null);
+
+        // Act
+        InvalidRequestException ire = assertThrows(InvalidRequestException.class, () -> sut.getTeamForPlayer(username));
+
+        // Assert
+        assertEquals(ire.getMessage(), "You aren't on a team");
+        verify(mockCoachRepo,times(1)).findCoachByPlayersContaining(any());
+    }
     @Test
     public void getTeamPlayers_returnsTeamMembers_WhenGivenValidUsername(){
         Coach validCoach = new Coach();
