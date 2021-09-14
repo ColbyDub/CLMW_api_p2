@@ -27,6 +27,10 @@ public class CoachService {
         this.passwordUtils = passwordUtils;
     }
 
+    public List<String[]> getTeamPlayers(String username) {
+        return coachRepository.findCoachByUsername(username).getPlayers();
+    }
+
     public Coach getCoach(String coachUsername) {
         Coach result = coachRepository.findCoachByUsername(coachUsername);
 
@@ -35,13 +39,6 @@ public class CoachService {
         }
 
         return result;
-    }
-
-    public List<String> getTeamPlayers(String username){
-        return coachRepository.findCoachByUsername(username).getPlayers()
-                .stream()
-                .map(player -> player[0])
-                .collect(Collectors.toList());
     }
 
     public Coach addPlayer(String coachUsername, String playerUsername) {
