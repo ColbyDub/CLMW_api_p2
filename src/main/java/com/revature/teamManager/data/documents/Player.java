@@ -11,28 +11,27 @@ public class Player {
     private String name;
     private String username;
     private String password;
-    private List<String> offers;
-    private List<String> exercises;
     private List<String> sports = new ArrayList<String>();
     private List<Skills> skills = new ArrayList<Skills>();
-
-    public Player(){
-        super();
-        this.offers = new ArrayList<>();
-        this.exercises = new ArrayList<>();
-
-        //Max of 5 skills can be changed later
-        //this.skills = new String[5][2];
-    }
+    private String[] exercises;
+    private String[] offers;
+    private String teamName;
+    private String[] invitations;
 
     //Only used in unit tests
-    public Player( String name, String username, String password){
+    public Player(String name, String username, String password) {
         super();
         this.name = name;
         this.username = username;
         this.password = password;
-        this.offers = new ArrayList<>();
-        this.exercises = new ArrayList<>();
+    }
+
+    public Player(String name, String username, String password, String teamName, String[] invitations) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.teamName = teamName;
+        this.invitations = invitations;
     }
 
     public String getName() {
@@ -59,11 +58,11 @@ public class Player {
         this.password = password;
     }
 
-    public List<String> getExercises() {
+    public String[] getExercises() {
         return exercises;
     }
 
-    public void setExercises(List<String> exercises) {
+    public void setExercises(String[] exercises) {
         this.exercises = exercises;
     }
 
@@ -75,11 +74,11 @@ public class Player {
         this.skills = skills;
     }
 
-    public List<String> getOffers() {
+    public String[] getOffers() {
         return offers;
     }
 
-    public void setOffers(List<String> offers) {
+    public void setOffers(String[] offers) {
         this.offers = offers;
     }
 
@@ -87,9 +86,6 @@ public class Player {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public List<String> getSports() {
         return sports;
@@ -111,5 +107,13 @@ public class Player {
                 ", sports=" + sports +
                 ", skills=" + skills +
                 '}';
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }
