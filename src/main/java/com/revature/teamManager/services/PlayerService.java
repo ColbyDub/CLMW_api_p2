@@ -12,6 +12,7 @@ import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -26,7 +27,7 @@ public class PlayerService {
 
     public boolean isValid(Player player){
 
-        if(player.getName() == "" || player.getUsername() == "" || player.getPassword() == "" || player.getPassword().length() <= 7){
+        if(player.getName() == "" || player.getUsername() == "" || player.getPassword() == "" || player.getSport() == "" || player.getPassword().length() <= 7){
             throw new InvalidRequestException("invalid user data");
         }
 
@@ -47,6 +48,14 @@ public class PlayerService {
         }
         return null;
     }
+	
+	public List<Player> findAll() {
+        return playerRepository.findAll();
+    }
+    public List<Player> findPlayersBySport(String sport) {
+        //FIXME RETURNS PASSWORD INFORMATON
+        return playerRepository.findPlayersBySport(sport);
+    }
 
     public Principal login(String username, String password){
 
@@ -60,14 +69,26 @@ public class PlayerService {
         return new Principal(authPlayer);
     }
 
-    public Player updateOffers(Offer newOffer){
-
+    public Player updateOffers(Offer newOffer, String type){
         Player updateOfferPlayer = playerRepository.findPlayerByUsername(newOffer.getPlayerUsername());
         List<String> newList = updateOfferPlayer.getOffers();
-        newList.add(newOffer.getCoachUsername());
-        updateOfferPlayer.setOffers(newList);
-        playerRepository.save(updateOfferPlayer);
-
+        if (type.equals("rescind"))
+        {
+            while (newList.contains(newOffer.getCoachUsername()))
+            {
+                newList.remove(newOffer.getCoachUsername());
+            }
+            updateOfferPlayer.setOffers(newList);
+            playerRepository.save(updateOfferPlayer);
+        }
+        else if (type.equals("extend")) {
+            if (!newList.contains(newOffer.getCoachUsername()))
+            {
+                newList.add(newOffer.getCoachUsername());
+            }
+            updateOfferPlayer.setOffers(newList);
+            playerRepository.save(updateOfferPlayer);
+        }
         return updateOfferPlayer;
     }
 
@@ -88,5 +109,26 @@ public class PlayerService {
         if (player == null) { throw new InvalidRequestException("There is no player with that username"); }
 
         return player;
+    }
+
+    public boolean addExercise(String teamPlayer, String exercise) {
+        Player currentPlayer = playerRepository.findPlayerByUsername(teamPlayer);
+        //Check for duplication?
+        List<String> exercises = currentPlayer.getExercises();
+        boolean notInList = true;
+        for (String e: exercises) {
+            if(e.equals(exercise)) {
+                notInList = false;
+                break;
+            }
+        }
+
+        if(notInList) {
+            exercises.add(exercise);
+            currentPlayer.setExercises(exercises);
+            playerRepository.save(currentPlayer);
+        }
+
+        return notInList;
     }
 }
