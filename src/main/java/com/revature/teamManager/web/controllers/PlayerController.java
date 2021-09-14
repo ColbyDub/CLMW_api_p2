@@ -2,6 +2,8 @@ package com.revature.teamManager.web.controllers;
 
 import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.services.PlayerService;
+import com.revature.teamManager.web.dtos.AddToProfile;
+import com.revature.teamManager.web.dtos.Credentials;
 import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.dtos.PlayerDTO;
 import com.revature.teamManager.web.util.security.Secured;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/players")
@@ -49,4 +52,15 @@ public class PlayerController {
 	public List<Player> getAllUsers(@PathVariable("sport") String sport) {
 		return playerService.findPlayersBySport(sport);
 	}
+
+    @PutMapping(value="/skill", produces = "application/json", consumes = "application/json")
+    public Player addSkill(@RequestBody AddToProfile addToProfile) {
+        return playerService.addSkill(addToProfile.getUsername(), addToProfile.getAddedValue());
+    }
+
+    @PutMapping(value="/sport", produces = "application/json", consumes = "application/json")
+    public Player addSport(@RequestBody AddToProfile addToProfile) {
+        return playerService.addSport(addToProfile.getUsername(), addToProfile.getAddedValue());
+    }
+
 }

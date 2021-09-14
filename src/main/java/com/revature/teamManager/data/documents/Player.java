@@ -11,18 +11,19 @@ public class Player {
     private String name;
     private String username;
     private String password;
-    private String sport;
 	private String teamName;
     private List<String> offers;
     private List<String> exercises;
-    private String[][] skills;
+    private List<String> sports = new ArrayList<String>();
+    private List<Skills> skills = new ArrayList<Skills>();
 
     public Player(){
         super();
         this.offers = new ArrayList<>();
         this.exercises = new ArrayList<>();
+
         //Max of 5 skills can be changed later
-        this.skills = new String[5][2];
+        //this.skills = new String[5][2];
     }
 
     //Only used in unit tests
@@ -31,7 +32,7 @@ public class Player {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.sport = sport;
+        this.sports.add(sport);
     }
 
     public Player(String name, String username, String password, String sport, String teamName, List<String> offers) {
@@ -75,11 +76,11 @@ public class Player {
         this.exercises = exercises;
     }
 
-    public String[][] getSkills() {
+    public List<Skills> getSkills() {
         return skills;
     }
 
-    public void setSkills(String[][] skills) {
+    public void setSkills(List<Skills> skills) {
         this.skills = skills;
     }
 
@@ -115,4 +116,25 @@ public class Player {
         this.sport = sport;
     }
 
+    public List<String> getSports() {
+        return sports;
+    }
+
+    public void setSports(List<String> sports) {
+        this.sports = sports;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", offers=" + offers +
+                ", exercises=" + exercises +
+                ", sports=" + sports +
+                ", skills=" + skills +
+                '}';
+    }
 }
