@@ -6,11 +6,13 @@ import com.revature.teamManager.data.repos.CoachRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
+import com.revature.teamManager.web.dtos.PlayerDTO;
 import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CoachService {
@@ -22,6 +24,14 @@ public class CoachService {
     public CoachService(CoachRepository coachRepository, PasswordUtils passwordUtils){
         this.coachRepository = coachRepository;
         this.passwordUtils = passwordUtils;
+    }
+
+
+    public List<String> getTeamPlayers(String username){
+        return coachRepository.findCoachByUsername(username).getPlayers()
+                .stream()
+                .map(player -> player[0])
+                .collect(Collectors.toList());
     }
 
     public Coach addPlayer(String coachUsername, String playerUsername) {

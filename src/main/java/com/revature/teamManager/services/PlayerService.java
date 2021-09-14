@@ -110,4 +110,25 @@ public class PlayerService {
 
         return player;
     }
+
+    public boolean addExercise(String teamPlayer, String exercise) {
+        Player currentPlayer = playerRepository.findPlayerByUsername(teamPlayer);
+        //Check for duplication?
+        List<String> exercises = currentPlayer.getExercises();
+        boolean notInList = true;
+        for (String e: exercises) {
+            if(e.equals(exercise)) {
+                notInList = false;
+                break;
+            }
+        }
+
+        if(notInList) {
+            exercises.add(exercise);
+            currentPlayer.setExercises(exercises);
+            playerRepository.save(currentPlayer);
+        }
+
+        return notInList;
+    }
 }

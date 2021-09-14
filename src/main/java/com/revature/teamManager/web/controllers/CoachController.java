@@ -28,4 +28,14 @@ public class CoachController {
         Coach updatedCoach = coachService.addPlayer(accepted.getCoachUsername(), accepted.getPlayerUsername());
         return updatedCoach;
     }
+
+
+    @PatchMapping(value = "/assign/{username}", produces = "application/json", consumes = "application/json")
+    public void assignWorkout(@RequestBody String exercise, @PathVariable String username){
+        for (String teamPlayer : coachService.getTeamPlayers(username)) {
+            if(!playerService.addExercise(teamPlayer,exercise))
+                System.out.println("Exercise ["+exercise+"] is already assigned to team member ["+teamPlayer+"]");
+        }
+        
+    }
 }
