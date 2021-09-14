@@ -41,6 +41,7 @@ public class CoachController {
     @PutMapping(value = "/team", produces = "application/json", consumes = "application/json")
     public Coach addPlayer(@RequestBody Offer accepted) {
         playerService.removeOffer(accepted);
+        playerService.addTeam(getCoach(accepted.getCoachUsername()).getTeamName(), accepted.getPlayerUsername());
         return coachService.addPlayer(accepted.getCoachUsername(), accepted.getPlayerUsername());
     }
 
@@ -52,5 +53,12 @@ public class CoachController {
                 System.out.println("Exercise ["+exercise+"] is already assigned to team member ["+teamPlayer[0]+"]");
 
         }
+    }
+
+    @GetMapping(value = "/player/{playerUsername}", produces = "application/json")
+    public CoachDTO findPlayersTeam(@PathVariable String playerUsername) {
+        Coach foundTeam = coachService.getTeamForPlayer(playerUsername);
+        CoachDTO teamDTO = new CoachDTO(foundTeam);
+        return teamDTO;
     }
 }
