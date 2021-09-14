@@ -36,7 +36,7 @@ public class PlayerController {
     }
 
     @Secured(allowedRoles = {"Player"})
-    @GetMapping(value = "{username}", produces = "application/json")
+    @GetMapping(value = "/user/{username}", produces = "application/json")
     public PlayerDTO getInfo(@PathVariable String username) {
         Player player = playerService.getPlayerInfo(username);
 
