@@ -256,8 +256,6 @@ public class CoachServiceTestSuite {
     }
 
     @Test
-<<<<<<< HEAD
-=======
     void offer_returnsSuccessful_whenValidCoachAndPlayer(){
 
     }
@@ -290,7 +288,6 @@ public class CoachServiceTestSuite {
     }
 
     @Test
->>>>>>> 3edb204e7c0ce2c0f6c5be1fe82331bd91eb2d4b
     public void addPlayer_returnsSuccessfully_WhenGivenUsernameAndPassword() {
         // Arrange
         Coach coach = new Coach();
@@ -415,7 +412,6 @@ public class CoachServiceTestSuite {
     }
 
     @Test
-<<<<<<< HEAD
     public void getTeamForPlayer_returnsSuccessfully_whenGivenValidUsername() {
         // Arrange
         String username = "validUsername";
@@ -451,7 +447,7 @@ public class CoachServiceTestSuite {
         assertEquals(ire.getMessage(), "You aren't on a team");
         verify(mockCoachRepo,times(1)).findCoachByPlayersContaining(any());
     }
-=======
+    @Test
     public void getTeamPlayers_returnsTeamMembers_WhenGivenValidUsername(){
         Coach validCoach = new Coach();
         validCoach.setCoachName("Bob");
@@ -476,5 +472,4 @@ public class CoachServiceTestSuite {
 
     }
 
->>>>>>> ebf84dd (Assign workouts (#15))
 }
