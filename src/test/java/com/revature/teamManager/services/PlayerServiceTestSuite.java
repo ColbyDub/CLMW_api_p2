@@ -430,7 +430,12 @@ public class PlayerServiceTestSuite {
 
         // Assert
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
-        verify(mockPlayerRepo, times(1)).save(any());
+        Skills newSkill = new Skills("Jumping");
+        newSkill.setRating(5);
+        List<Skills> noSetThis = new ArrayList<>();
+        noSetThis.add(newSkill);
+        player.setSkills(noSetThis);
+        verify(mockPlayerRepo, times(1)).save(player);
 
     }
 
