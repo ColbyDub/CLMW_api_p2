@@ -13,8 +13,8 @@ public class Player {
     private String password;
     private String teamName;
     private String[] invitations;
-    private List<String> offers;
-    private List<String> exercises;
+    private List<String> offers = new ArrayList<String>();
+    private List<String> exercises = new ArrayList<String>();
     private List<String> sports = new ArrayList<String>();
     private List<Skills> skills = new ArrayList<Skills>();
 

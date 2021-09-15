@@ -18,16 +18,12 @@ public class Coach {
     private String teamName;
     private String sport;
 
-    private List<String[]> players;
+    private List<String[]> players = new ArrayList<String[]>();
 
     public Coach() {
     }
 
-    public Coach(HashMap<String, String> players) {
-        super();
 
-        this.players = new ArrayList<>();
-    }
 
     public Coach(String id, String coachName, String username, String password, String teamName, String sport, List<String[]> players) {
         this.id = id;
