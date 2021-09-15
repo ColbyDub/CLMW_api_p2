@@ -28,7 +28,7 @@ public class PlayerService {
 
     public boolean isValid(Player player){
 
-        if(player.getName() == "" || player.getUsername() == "" || player.getPassword() == "" || player.getPassword().length() <= 7){
+        if(player.getName() == "" || player.getUsername() == "" || player.getPassword() == "" || player.getSports().isEmpty() || player.getPassword().length() <= 7){
             throw new InvalidRequestException("invalid user data");
         }
 

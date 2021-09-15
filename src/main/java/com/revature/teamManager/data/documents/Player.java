@@ -11,29 +11,30 @@ public class Player {
     private String name;
     private String username;
     private String password;
-    private List<String> sports = new ArrayList<String>();
-    private List<Skills> skills = new ArrayList<Skills>();
+    private String teamName;
     private String[] invitations;
-	private String teamName;
     private List<String> offers;
     private List<String> exercises;
+    private List<String> sports = new ArrayList<String>();
+    private List<Skills> skills = new ArrayList<Skills>();
 
     public Player(){
-
     }
 
     //Only used in unit tests
-    public Player( String name, String username, String password) {
+    public Player( String name, String username, String password, String sport) {
         super();
         this.name = name;
         this.username = username;
         this.password = password;
+        this.sports.add(sport);
     }
 
-    public Player(String name, String username, String password, String teamName, List<String> offers) {
+    public Player(String name, String username, String password, String sport, String teamName, List<String> offers) {
         this.name = name;
         this.username = username;
         this.password = password;
+        this.sports.add(sport);
         this.teamName = teamName;
         this.offers = offers;
     }
