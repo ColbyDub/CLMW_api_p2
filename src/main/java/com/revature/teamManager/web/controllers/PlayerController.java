@@ -76,4 +76,9 @@ public class PlayerController {
 	public List<Player> getAllUsers(@PathVariable("sport") String sport) {
 		return playerService.findPlayersBySport(sport);
 	}
+
+	@GetMapping(produces = "application/json")
+    public List<Player> recruitAll() {
+        return playerService.findAll();
+    }
 }
