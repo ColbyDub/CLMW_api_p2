@@ -51,6 +51,11 @@ public class PlayerController {
         return playerService.addSkill(addToProfile.getUsername(), addToProfile.getAddedValue());
     }
 
+    @PutMapping(value="/skill/rate")
+    public void rateSkill(@RequestParam String username, @RequestParam String skill, @RequestParam int rating) {
+        playerService.rateSkill(username, skill, rating);
+    }
+
     @PutMapping(value="/sport", produces = "application/json", consumes = "application/json")
     public Player addSport(@RequestBody AddToProfile addToProfile) {
         return playerService.addSport(addToProfile.getUsername(), addToProfile.getAddedValue());
