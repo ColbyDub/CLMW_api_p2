@@ -23,9 +23,6 @@ public class Player {
         super();
         this.offers = new ArrayList<>();
         this.exercises = new ArrayList<>();
-
-        //Max of 5 skills can be changed later
-        //this.skills = new String[5][2];
     }
 
     //Only used in unit tests
