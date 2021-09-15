@@ -13,6 +13,7 @@ import com.revature.teamManager.web.dtos.Principal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -407,6 +408,69 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
 
         assertFalse(check);
+
+    }
+
+    @Test
+    public void rateSkill_updatesRepository_whenGivenValidInformation() {
+        // Arrange
+        Player player = new Player();
+        player.setName("Billy Bobson");
+        player.setUsername("HiImBilly");
+        player.setPassword("password");
+        Skills skill = new Skills("Jumping");
+        List<Skills> setThis = new ArrayList<>();
+        setThis.add(skill);
+        player.setSkills(setThis);
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        sut.rateSkill("HiImBilly", "Jumping", 5);
+
+        // Assert
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+
+    }
+
+    @Test
+    public void rateSkill_throwsInvalidRequestException_whenGivenInvalidUsername() {
+        // Arrange
+        String username = "billybob";
+        String skill = "sprint";
+        int rating = 2;
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(null);
+
+        // Act
+        InvalidRequestException ire = assertThrows(InvalidRequestException.class, () -> sut.rateSkill(username, skill, rating));
+
+        // Assert
+        assertEquals(ire.getMessage(), "That player doesn't exist");
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(0)).save(any());
+    }
+
+    @Test
+    public void rateSkill_throwsInvalidRequestException_whenGivenInvalidSkill() {
+        // Arrange
+        Player player = new Player();
+        player.setName("Billy Bobson");
+        player.setUsername("HiImBilly");
+        player.setPassword("password");
+        Skills skill = new Skills("Jumping");
+        List<Skills> setThis = new ArrayList<>();
+        setThis.add(skill);
+        player.setSkills(setThis);
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+
+        // Act
+        InvalidRequestException ire = assertThrows(InvalidRequestException.class, () -> sut.rateSkill("HiImBilly", "sprint", 4));
+
+        // Assert
+        assertEquals(ire.getMessage(), "That player doesn't have that skill");
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(0)).save(any());
 
     }
 
