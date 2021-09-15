@@ -39,7 +39,7 @@ public class Player {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.sport = sport;
+        this.sports.add(sport);
         this.teamName = teamName;
         this.offers = offers;
     }
@@ -106,14 +106,6 @@ public class Player {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
-    }
-
-    public String getSport() {
-        return sport;
-    }
-
-    public void setSport(String sport) {
-        this.sport = sport;
     }
 
     public List<String> getSports() {

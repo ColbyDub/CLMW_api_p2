@@ -275,7 +275,7 @@ public class PlayerServiceTestSuite {
     }
 
     @Test
-    public void addExercise_returnsFalse_WhenExercisesContainAddedOne(){
+    public void addExercise_returnsFalse_WhenExercisesContainAddedOne() {
         Player player = new Player();
         player.setName("Bob Bobson");
         player.setUsername("validUsername");
@@ -286,16 +286,17 @@ public class PlayerServiceTestSuite {
 
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
 
-        boolean check = sut.addExercise("validUsername","Rump Jope");
+        boolean check = sut.addExercise("validUsername", "Rump Jope");
 
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
 
         assertFalse(check);
+    }
 
     //validSports tests
     @Test
     public void sportValid_returnsTrue_whenGivenValidValue(){
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
         String addSport = "baseball";
 
@@ -308,7 +309,7 @@ public class PlayerServiceTestSuite {
     @Test
     public void sportValid_throwsInvalidRequestException_whenGivenEmptyValue(){
 
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         String addSport = "";
 
         //act
@@ -322,7 +323,7 @@ public class PlayerServiceTestSuite {
     @Test
     public void sportValid_throwsResourcePersistenceException_whenGivenDuplicateValue(){
 
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
         player.getSports().add("baseball");
         String addSport = "baseball";
@@ -338,14 +339,14 @@ public class PlayerServiceTestSuite {
     @Test
     public void addSport_returnsPlayer_whenGivenValidValue(){
 
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
         String addSport = "baseball";
 
         Player result = sut.addSport("username", addSport);
 
         assertEquals(player, result);
-        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(2)).findPlayerByUsername(any()); //addSkill calls skillValid, both call find
         verify(mockPlayerRepo, times(1)).save(any());
     }
 
@@ -353,7 +354,7 @@ public class PlayerServiceTestSuite {
     @Test
     public void skillValid_returnsTrue_whenGivenValidValue(){
 
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
         String addSkill = "bunting";
 
@@ -366,7 +367,7 @@ public class PlayerServiceTestSuite {
     @Test
     public void skillValid_throwsInvalidRequestException_whenGivenEmptyValue(){
 
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         String addSkill = "";
 
         //act
@@ -380,7 +381,7 @@ public class PlayerServiceTestSuite {
     @Test
     public void skillValid_throwsResourcePersistenceException_whenGivenDuplicateValue(){
 
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
         Skills skill = new Skills("bunting");
         player.getSkills().add(skill);
@@ -397,14 +398,14 @@ public class PlayerServiceTestSuite {
     @Test
     public void addSkill_returnsPlayer_whenGivenValidValue(){
 
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password", "sport");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
         String addSkill = "baseball";
 
         Player result = sut.addSkill("username", addSkill);
 
         assertEquals(player, result);
-        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(2)).findPlayerByUsername(any()); //addSkill calls skillValid, both call find
         verify(mockPlayerRepo, times(1)).save(any());
     }
 
