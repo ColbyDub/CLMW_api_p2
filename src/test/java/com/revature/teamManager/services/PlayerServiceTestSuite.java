@@ -8,11 +8,13 @@ import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
+import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.dtos.Principal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -179,7 +181,7 @@ public class PlayerServiceTestSuite {
     //validSports tests
     @Test
     public void sportValid_returnsTrue_whenGivenValidValue(){
-        Player player = new Player("name", "username", "password");
+        Player player = new Player("name", "username", "password" );
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
         String addSport = "baseball";
 
@@ -279,7 +281,7 @@ public class PlayerServiceTestSuite {
 
     //addSkill
     @Test
-    public void addSkill_returnsPlayer_whenGivenValidValue(){
+    public void addSkill_returnsPlayer_whenGivenValidValue() {
 
         Player player = new Player("name", "username", "password");
         when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
@@ -290,6 +292,122 @@ public class PlayerServiceTestSuite {
         assertEquals(player, result);
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
         verify(mockPlayerRepo, times(1)).save(any());
+    }
+
+    @Test
+    public void removeOffer_updatesPlayerOffers_whenGivenValidInformation() {
+        // Arrange
+        Offer validOffer = new Offer();
+        validOffer.setCoachUsername("validCoach");
+        validOffer.setPlayerUsername("validPlayer");
+        Player player = new Player();
+        player.setName("Billy");
+        player.setUsername("validPlayer");
+        player.setPassword("password");
+        List<String> offers = new ArrayList<>();
+        offers.add("validCoach");
+        player.setOffers(offers);
+        when(mockPlayerRepo.findPlayerByUsername("validPlayer")).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+
+        // Act
+        sut.removeOffer(validOffer);
+
+        // Assert
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername("validPlayer");
+        verify(mockPlayerRepo, times(1)).save(any());
+    }
+
+    @Test
+    public void removeOffer_throwsInvalidRequestException_whenGivenInvalidOffer() {
+        // Arrange
+        Offer invalidOffer = new Offer();
+        invalidOffer.setCoachUsername("validCoach");
+        invalidOffer.setPlayerUsername("validPlayer");
+        Player player = new Player();
+        player.setName("Billy");
+        player.setUsername("validPlayer");
+        player.setPassword("password");
+        when(mockPlayerRepo.findPlayerByUsername("validPlayer")).thenReturn(player);
+
+        // Act
+        InvalidRequestException ire = assertThrows(InvalidRequestException.class, () -> sut.removeOffer(invalidOffer));
+
+        // Assert
+        assertEquals(ire.getMessage(), "You don't have an offer from that coach");
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(0)).save(any());
+    }
+
+    @Test
+    public void getPlayerInfo_ReturnsSuccessfully_whenGivenValidUsername() {
+        // Arrange
+        String username = "validUsername";
+        Player player = new Player();
+        player.setName("Bob Bobson");
+        player.setUsername("validUsername");
+        player.setPassword("password");
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+
+        // Act
+        Player actualPlayer = sut.getPlayerInfo(username);
+
+        //Assert
+        assertEquals(player,actualPlayer);
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+
+    }
+
+    @Test
+    public void getPlayerInfo_throwsInvalidRequestException_whenGivenInvalidUsername() {
+        // Arrange
+        String username = "invalidUsername";
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(null);
+
+        // Act
+        InvalidRequestException ire = assertThrows(InvalidRequestException.class, () -> sut.getPlayerInfo(username));
+
+        // Assert
+        assertEquals(ire.getMessage(), "There is no player with that username");
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+    }
+
+    @Test
+    public void addExercise_returnsTrue_WhenExercisesDontHaveAddedOne(){
+        Player player = new Player();
+        player.setName("Bob Bobson");
+        player.setUsername("validUsername");
+        player.setPassword("password");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+
+        boolean check = sut.addExercise("validUsername","Rope jumps");
+
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+
+        assertTrue(null,check);
+
+    }
+
+    @Test
+    public void addExercise_returnsFalse_WhenExercisesContainAddedOne(){
+        Player player = new Player();
+        player.setName("Bob Bobson");
+        player.setUsername("validUsername");
+        player.setPassword("password");
+        List<String> exercises = new ArrayList<>();
+        exercises.add("Rump Jope");
+        player.setExercises(exercises);
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+
+        boolean check = sut.addExercise("validUsername","Rump Jope");
+
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+
+        assertFalse(check);
+
     }
 
 }

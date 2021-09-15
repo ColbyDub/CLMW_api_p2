@@ -53,27 +53,50 @@ public class PlayerService {
 	public List<Player> findAll() {
         return playerRepository.findAll();
     }
+    public List<Player> findPlayersBySport(String sport) {
+        //FIXME RETURNS PASSWORD INFORMATON
+        return playerRepository.findPlayersBySport(sport);
+    }
 
     public Principal login(String username, String password){
 
         String encryptedPassword = passwordUtils.generateSecurePassword(password);
         Player authPlayer = playerRepository.findPlayerByUsernameAndPassword(username, encryptedPassword);
 
-        if(authPlayer == null){
+       if(authPlayer == null){
             throw new AuthenticationException("Invalid login credentials");
         }
 
         return new Principal(authPlayer);
     }
 
-    public Player updateOffers(Offer newOffer){
+    public Player addTeam(String teamName, String playerUsername)
+    {
+        Player updateOfferPlayer = playerRepository.findPlayerByUsername(playerUsername);
+        updateOfferPlayer.setTeamName(teamName);
+        return playerRepository.save(updateOfferPlayer);
+    }
 
+    public Player updateOffers(Offer newOffer, String type){
         Player updateOfferPlayer = playerRepository.findPlayerByUsername(newOffer.getPlayerUsername());
         List<String> newList = updateOfferPlayer.getOffers();
-        newList.add(newOffer.getCoachUsername());
-        updateOfferPlayer.setOffers(newList);
-        playerRepository.save(updateOfferPlayer);
-
+        if (type.equals("rescind"))
+        {
+            while (newList.contains(newOffer.getCoachUsername()))
+            {
+                newList.remove(newOffer.getCoachUsername());
+            }
+            updateOfferPlayer.setOffers(newList);
+            playerRepository.save(updateOfferPlayer);
+        }
+        else if (type.equals("extend")) {
+            if (!newList.contains(newOffer.getCoachUsername()))
+            {
+                newList.add(newOffer.getCoachUsername());
+            }
+            updateOfferPlayer.setOffers(newList);
+            playerRepository.save(updateOfferPlayer);
+        }
         return updateOfferPlayer;
     }
 
@@ -122,4 +145,43 @@ public class PlayerService {
         return true;
     }
 
+    public void removeOffer(Offer acceptedOffer) {
+        Player removeOfferPlayer = playerRepository.findPlayerByUsername(acceptedOffer.getPlayerUsername());
+        List<String> offers = removeOfferPlayer.getOffers();
+        boolean removed = offers.remove(acceptedOffer.getCoachUsername());
+        if (!removed) {
+            throw new InvalidRequestException("You don't have an offer from that coach");
+        }
+        removeOfferPlayer.setOffers(offers);
+        playerRepository.save(removeOfferPlayer);
+    }
+
+    public Player getPlayerInfo(String username) {
+        Player player = playerRepository.findPlayerByUsername(username);
+
+        if (player == null) { throw new InvalidRequestException("There is no player with that username"); }
+
+        return player;
+    }
+
+    public boolean addExercise(String teamPlayer, String exercise) {
+        Player currentPlayer = playerRepository.findPlayerByUsername(teamPlayer);
+        //Check for duplication?
+        List<String> exercises = currentPlayer.getExercises();
+        boolean notInList = true;
+        for (String e: exercises) {
+            if(e.equals(exercise)) {
+                notInList = false;
+                break;
+            }
+        }
+
+        if(notInList) {
+            exercises.add(exercise);
+            currentPlayer.setExercises(exercises);
+            playerRepository.save(currentPlayer);
+        }
+
+        return notInList;
+    }
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class Principal {
 
-    private String id;      //Needed? ->or use username as unique id
+    private String id;
     private String username;
     private String role;
 
@@ -18,6 +18,7 @@ public class Principal {
     }
 
     public Principal(Coach subject) {
+        this.id = subject.getId();
         this.username = subject.getUsername();
         this.role = "Coach";
     }
