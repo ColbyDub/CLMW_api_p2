@@ -1,25 +1,22 @@
 package com.revature.teamManager.services;
 
 import com.revature.teamManager.data.documents.Coach;
-import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.repos.CoachRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
-import com.revature.teamManager.web.dtos.PlayerDTO;
+
 import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CoachService {
 
-    private CoachRepository coachRepository;
-    private PasswordUtils passwordUtils;
+    private final CoachRepository coachRepository;
+    private final PasswordUtils passwordUtils;
 
     @Autowired
     public CoachService(CoachRepository coachRepository, PasswordUtils passwordUtils){
@@ -45,13 +42,36 @@ public class CoachService {
         Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
         List<String[]> players = toUpdate.getPlayers();
         for (String[] s : players) {
-            if (s[0] == playerUsername) {
+            if (s[0].equals(playerUsername)) {
                 return toUpdate;
             }
         }
         players.add(new String[] {playerUsername, "No Position"});
         toUpdate.setPlayers(players);
         coachRepository.save(toUpdate);
+
+        return toUpdate;
+    }
+
+    public Coach removePlayer(String coachUsername, String playerUsername) {
+        Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
+        List<String[]> players = toUpdate.getPlayers();
+        boolean found = false;
+
+        for (String[] s : players) {
+            if (s[0].equals(playerUsername)) {
+                players.remove(s);
+                found = true;
+                break;
+            }
+        }
+
+        if(found){
+            toUpdate.setPlayers(players);
+            coachRepository.save(toUpdate);
+        } else {
+            //Player not found!!
+        }
 
         return toUpdate;
     }

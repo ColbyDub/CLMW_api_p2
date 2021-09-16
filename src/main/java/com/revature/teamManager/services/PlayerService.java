@@ -70,11 +70,18 @@ public class PlayerService {
         return new Principal(authPlayer);
     }
 
-    public Player addTeam(String teamName, String playerUsername)
+    public void addTeam(String teamName, String playerUsername)
     {
         Player updateOfferPlayer = playerRepository.findPlayerByUsername(playerUsername);
         updateOfferPlayer.setTeamName(teamName);
-        return playerRepository.save(updateOfferPlayer);
+        playerRepository.save(updateOfferPlayer);
+    }
+
+    public void removeTeam(String playerUsername) {
+        Player updateOfferPlayer = playerRepository.findPlayerByUsername(playerUsername);
+        //FIX THIS.. Throw if updateOfferPlayer is null.
+        updateOfferPlayer.setTeamName("");
+        playerRepository.save(updateOfferPlayer);
     }
 
     public Player updateOffers(Offer newOffer, String type){
@@ -184,4 +191,5 @@ public class PlayerService {
 
         return notInList;
     }
+
 }
