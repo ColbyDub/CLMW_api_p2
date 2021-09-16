@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,12 +17,13 @@ public class Coach {
     private String password;
     private String teamName;
     private String sport;
-    private List<String[]> players;
+
+    private List<String[]> players = new ArrayList<String[]>();
 
     public Coach() {
-        super();
-        this.players = new ArrayList<>();
     }
+
+
 
     public Coach(String id, String coachName, String username, String password, String teamName, String sport, List<String[]> players) {
         this.id = id;

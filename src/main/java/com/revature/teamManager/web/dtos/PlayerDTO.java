@@ -1,6 +1,9 @@
 package com.revature.teamManager.web.dtos;
 
 import com.revature.teamManager.data.documents.Player;
+import com.revature.teamManager.data.documents.Skills;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +13,7 @@ public class PlayerDTO {
     private String username;
     private List<String> offers;
     private List<String> exercises;
-    private String[][] skills;
+    private List<Skills> skills = new ArrayList<Skills>();
 
     public PlayerDTO() {
         super();
@@ -57,11 +60,11 @@ public class PlayerDTO {
         this.exercises = exercises;
     }
 
-    public String[][] getSkills() {
+    public List<Skills> getSkills() {
         return skills;
     }
 
-    public void setSkills(String[][] skills) {
+    public void setSkills(List<Skills> skills) {
         this.skills = skills;
     }
 
