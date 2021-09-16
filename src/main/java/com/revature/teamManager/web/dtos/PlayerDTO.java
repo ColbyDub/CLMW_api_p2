@@ -13,7 +13,7 @@ public class PlayerDTO {
     private String username;
     private List<String> offers;
     private List<String> exercises;
-    private List<String> completedExercises;
+    private List<String> completedExercises = new ArrayList<String>();
     private List<Skills> skills = new ArrayList<Skills>();
 
     public PlayerDTO() {
@@ -63,7 +63,7 @@ public class PlayerDTO {
     }
 
     public List<String> getCompletedExercises() {
-        return exercises;
+        return completedExercises;
     }
 
     public void setCompletedExercises(List<String> completedExercises) {
