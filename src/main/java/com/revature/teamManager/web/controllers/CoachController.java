@@ -52,7 +52,7 @@ public class CoachController {
     @Secured(allowedRoles = "Coach")
     @PatchMapping(value = "/assign/{username}", produces = "application/json", consumes = "application/json")
     public void assignWorkout(@RequestBody String exercise, @PathVariable String username){
-        for (String teamPlayer[] : coachService.getTeamPlayers(username)) {
+        for (String[] teamPlayer : coachService.getTeamPlayers(username)) {
             if(!playerService.addExercise(teamPlayer[0],exercise))
                 System.out.println("Exercise ["+exercise+"] is already assigned to team member ["+teamPlayer[0]+"]");
 
@@ -62,7 +62,6 @@ public class CoachController {
     @GetMapping(value = "/player/{playerUsername}", produces = "application/json")
     public CoachDTO findPlayersTeam(@PathVariable String playerUsername) {
         Coach foundTeam = coachService.getTeamForPlayer(playerUsername);
-        CoachDTO teamDTO = new CoachDTO(foundTeam);
-        return teamDTO;
+        return new CoachDTO(foundTeam);
     }
 }
