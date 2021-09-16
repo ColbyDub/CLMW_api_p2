@@ -23,8 +23,7 @@ public class CoachController {
     @GetMapping(value="{username}", produces = "application/json")
     public CoachDTO getCoach(@PathVariable String username) {
         Coach coach = coachService.getCoach(username);
-        CoachDTO responseCoach = new CoachDTO(coach);
-        return responseCoach;
+        return new CoachDTO(coach);
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
@@ -37,12 +36,17 @@ public class CoachController {
         coachService.assignPosition(req.getCoachUsername(), req.getPlayerUsername(), req.getPosition());
     }
 
-
     @PutMapping(value = "/team", produces = "application/json", consumes = "application/json")
     public Coach addPlayer(@RequestBody Offer accepted) {
         playerService.removeOffer(accepted);
         playerService.addTeam(getCoach(accepted.getCoachUsername()).getTeamName(), accepted.getPlayerUsername());
         return coachService.addPlayer(accepted.getCoachUsername(), accepted.getPlayerUsername());
+    }
+
+    @PatchMapping(value = "/team/remove", produces = "application/json", consumes = "application/json")
+    public Coach removePlayer(@RequestBody Offer remove) {
+        playerService.removeTeam(remove.getPlayerUsername());
+        return coachService.removePlayer(remove.getCoachUsername(), remove.getPlayerUsername());
     }
 
     @Secured(allowedRoles = "Coach")
