@@ -42,8 +42,7 @@ public class PlayerController {
 
     @PutMapping(value = "/{operation}")
     public Player extendOffer(@RequestBody Offer newOffer, @PathVariable("operation") String operation){
-        Player foundPlayer = playerService.updateOffers(newOffer, operation);
-        return foundPlayer;
+        return playerService.updateOffers(newOffer, operation);
     }
 
     @PutMapping(value="/skill", produces = "application/json", consumes = "application/json")
@@ -67,9 +66,15 @@ public class PlayerController {
     public PlayerDTO getInfo(@PathVariable String username) {
         Player player = playerService.getPlayerInfo(username);
 
-        PlayerDTO response = new PlayerDTO(player);
+        return new PlayerDTO(player);
+    }
 
-        return response;
+    @Secured(allowedRoles = {"Player"})
+    @GetMapping(value = "/exercises/{username}", produces = "application/json")
+    public List<String> getExercises(@PathVariable String username) {
+        PlayerDTO player = getInfo(username);
+
+        return player.getExercises();
     }
 
 	@GetMapping(value = "/{sport}", produces = "application/json")

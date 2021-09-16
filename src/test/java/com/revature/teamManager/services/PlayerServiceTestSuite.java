@@ -407,7 +407,6 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
 
         assertFalse(check);
-
     }
 
 }
