@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class CoachService {
 
-    private CoachRepository coachRepository;
-    private PasswordUtils passwordUtils;
+    private final CoachRepository coachRepository;
+    private final PasswordUtils passwordUtils;
 
     @Autowired
     public CoachService(CoachRepository coachRepository, PasswordUtils passwordUtils){
@@ -42,13 +42,36 @@ public class CoachService {
         Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
         List<String[]> players = toUpdate.getPlayers();
         for (String[] s : players) {
-            if (s[0] == playerUsername) {
+            if (s[0].equals(playerUsername)) {
                 return toUpdate;
             }
         }
         players.add(new String[] {playerUsername, "No Position"});
         toUpdate.setPlayers(players);
         coachRepository.save(toUpdate);
+
+        return toUpdate;
+    }
+
+    public Coach removePlayer(String coachUsername, String playerUsername) {
+        Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
+        List<String[]> players = toUpdate.getPlayers();
+        boolean found = false;
+
+        for (String[] s : players) {
+            if (s[0].equals(playerUsername)) {
+                players.remove(s);
+                found = true;
+                break;
+            }
+        }
+
+        if(found){
+            toUpdate.setPlayers(players);
+            coachRepository.save(toUpdate);
+        } else {
+            //Player not found!!
+        }
 
         return toUpdate;
     }

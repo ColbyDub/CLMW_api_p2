@@ -16,6 +16,7 @@ public interface PlayerRepository extends MongoRepository<Player, String> {
 
     @Query(value="{}",fields="{'username' : 1, 'name' : 1, 'teamName' : 1, 'invitations' : 1}")
     List <Player> findAll();
+    @Query("{'sports': {$elemMatch: {$in: [?0]}}}")
     List <Player> findPlayersBySport(String sport);
 
 //    Player updatePlayerOffers(String username){
