@@ -13,6 +13,7 @@ public class PlayerDTO {
     private String username;
     private List<String> offers;
     private List<String> exercises;
+    private List<String> completedExercises = new ArrayList<String>();
     private List<Skills> skills = new ArrayList<Skills>();
 
     public PlayerDTO() {
@@ -25,6 +26,7 @@ public class PlayerDTO {
         this.username = player.getUsername();
         this.offers = player.getOffers();
         this.exercises = player.getExercises();
+        this.completedExercises = player.getCompletedExercises();
         this.skills = player.getSkills();
     }
 
@@ -58,6 +60,14 @@ public class PlayerDTO {
 
     public void setExercises(List<String> exercises) {
         this.exercises = exercises;
+    }
+
+    public List<String> getCompletedExercises() {
+        return completedExercises;
+    }
+
+    public void setCompletedExercises(List<String> completedExercises) {
+        this.completedExercises = completedExercises;
     }
 
     public List<Skills> getSkills() {
