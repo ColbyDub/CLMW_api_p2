@@ -61,6 +61,10 @@ public class PlayerController {
         return playerService.addSport(addToProfile.getUsername(), addToProfile.getAddedValue());
     }
 
+    @GetMapping(value = "/{sport}", produces = "application/json")
+    public List<Player> getAllUsersBySport(@PathVariable("sport") String sport) {
+        return playerService.findPlayersBySport(sport);
+    }
 	
 	@GetMapping(produces = "application/json")
 	public List<Player> getAllUsers() {
@@ -77,13 +81,6 @@ public class PlayerController {
         return response;
     }
 
-	@GetMapping(value = "/{sport}", produces = "application/json")
-	public List<Player> getAllUsers(@PathVariable("sport") String sport) {
-		return playerService.findPlayersBySport(sport);
-	}
 
-	@GetMapping(produces = "application/json")
-    public List<Player> recruitAll() {
-        return playerService.findAll();
-    }
+
 }
