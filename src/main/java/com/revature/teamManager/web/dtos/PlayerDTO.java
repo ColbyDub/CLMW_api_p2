@@ -11,6 +11,7 @@ public class PlayerDTO {
 
     private String name;
     private String username;
+    private String teamName;
     private List<String> offers;
     private List<String> exercises;
     private List<Skills> skills = new ArrayList<Skills>();
@@ -23,6 +24,7 @@ public class PlayerDTO {
         super();
         this.name = player.getName();
         this.username = player.getUsername();
+        this.teamName = player.getTeamName();
         this.offers = player.getOffers();
         this.exercises = player.getExercises();
         this.skills = player.getSkills();
@@ -68,17 +70,25 @@ public class PlayerDTO {
         this.skills = skills;
     }
 
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerDTO playerDTO = (PlayerDTO) o;
-        return Objects.equals(name, playerDTO.name) && Objects.equals(username, playerDTO.username) && Objects.equals(offers, playerDTO.offers) && Objects.equals(exercises, playerDTO.exercises);
+        return Objects.equals(name, playerDTO.name) && Objects.equals(username, playerDTO.username) && Objects.equals(teamName, playerDTO.teamName) && Objects.equals(offers, playerDTO.offers) && Objects.equals(exercises, playerDTO.exercises) && Objects.equals(skills, playerDTO.skills);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, username, offers, exercises);
+        return Objects.hash(name, username, teamName, offers, exercises, skills);
     }
 
     @Override
@@ -86,8 +96,10 @@ public class PlayerDTO {
         return "PlayerDTO{" +
                 "name='" + name + '\'' +
                 ", username='" + username + '\'' +
+                ", teamName='" + teamName + '\'' +
                 ", offers=" + offers +
                 ", exercises=" + exercises +
+                ", skills=" + skills +
                 '}';
     }
 }
