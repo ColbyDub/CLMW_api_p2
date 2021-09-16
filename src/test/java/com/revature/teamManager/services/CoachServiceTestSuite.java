@@ -256,11 +256,6 @@ public class CoachServiceTestSuite {
     }
 
     @Test
-    void offer_returnsSuccessful_whenValidCoachAndPlayer(){
-
-    }
-
-    @Test
     public void assignPosition_callsRepositoryMethods_whenGivenValidInformation() {
         // Arrange
         String coachUsername = "ValidUsername";
