@@ -192,4 +192,19 @@ public class PlayerService {
         return notInList;
     }
 
+    public void rateSkill(String username, String skill, int rating) {
+        Player toRate = playerRepository.findPlayerByUsername(username);
+
+        if (toRate == null) {
+            throw new InvalidRequestException("That player doesn't exist");
+        }
+        for (int i = 0; i < toRate.getSkills().size(); i++) {
+            if (toRate.getSkills().get(i).getSkill().equals(skill)) {
+                toRate.getSkills().get(i).setRating(rating);
+                playerRepository.save(toRate);
+                return;
+            }
+        }
+        throw new InvalidRequestException("That player doesn't have that skill");
+    }
 }
