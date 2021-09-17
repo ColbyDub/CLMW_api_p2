@@ -8,6 +8,7 @@ import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
+import com.revature.teamManager.web.dtos.ModifyExercise;
 import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.stereotype.Service;
@@ -207,4 +208,37 @@ public class PlayerService {
         }
         throw new InvalidRequestException("That player doesn't have that skill");
     }
+
+    public Player modifyExercise(ModifyExercise exerciseObject, String type){
+        Player updateExercisePlayer = playerRepository.findPlayerByUsername(exerciseObject.getPlayerUsername());
+        List<String> exercises = updateExercisePlayer.getExercises();
+        List<String> completedExercises = updateExercisePlayer.getCompletedExercises();
+        if (type.equals("complete"))
+        {
+            while (exercises.contains(exerciseObject.getExercise()))
+            {
+                exercises.remove(exerciseObject.getExercise());
+            }
+            completedExercises.add(exerciseObject.getExercise());
+
+            updateExercisePlayer.setExercises(exercises);
+            updateExercisePlayer.setCompletedExercises(completedExercises);
+
+            playerRepository.save(updateExercisePlayer);
+        }
+        else if (type.equals("uncomplete")) {
+            while (completedExercises.contains(exerciseObject.getExercise()))
+            {
+                completedExercises.remove(exerciseObject.getExercise());
+            }
+            exercises.add(exerciseObject.getExercise());
+
+            updateExercisePlayer.setExercises(exercises);
+            updateExercisePlayer.setCompletedExercises(completedExercises);
+
+            playerRepository.save(updateExercisePlayer);
+        }
+        return updateExercisePlayer;
+    }
+
 }
