@@ -6,13 +6,9 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
-import java.util.List;
 
 @Repository
 public interface PlayerRepository extends MongoRepository<Player, String> {
-
-    //@Query("{username: ?}") Custom queries using this annotation
-
     Player findPlayerByUsernameAndPassword(String username, String password);
     Player findPlayerByUsername(String username);
 
@@ -20,9 +16,5 @@ public interface PlayerRepository extends MongoRepository<Player, String> {
     List <Player> findAll();
     @Query("{'sports': {$elemMatch: {$in: [?0]}}}")
     List <Player> findPlayersBySport(String sport);
-
-//    Player updatePlayerOffers(String username){
-//        Player
-//    }
 
 }

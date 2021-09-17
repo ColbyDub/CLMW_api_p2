@@ -11,6 +11,7 @@ public class Player {
     private String name;
     private String username;
     private String password;
+
     private String teamName;
     private String[] invitations;
     private List<String> offers = new ArrayList<String>();
