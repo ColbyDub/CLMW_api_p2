@@ -13,7 +13,7 @@ phases:
       - mvn package
   post_build:
     commands:
-      - rm target/project2_api-1.0-SNAPSHOT.jar.original
+      - mv target/project2_api-1.0-SNAPSHOT.jar CLMW_api_p2
 
 artifacts:
   files:
