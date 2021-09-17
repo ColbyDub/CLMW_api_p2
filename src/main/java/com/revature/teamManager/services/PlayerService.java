@@ -53,6 +53,7 @@ public class PlayerService {
 	public List<Player> findAll() {
         return playerRepository.findAll();
     }
+
     public List<Player> findPlayersBySport(String sport) {
         //FIXME RETURNS PASSWORD INFORMATON
         return playerRepository.findPlayersBySport(sport);
