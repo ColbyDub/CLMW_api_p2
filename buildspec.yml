@@ -4,15 +4,14 @@ phases:
   install:
     runtime-versions:
       java: corretto8
-    pre_build:
-      commands:
-        - aws s3 cp s3://clmw-api-hosting/application.yml ./src/main/resources/application.yml
-    build:
-      commands:
-        - echo Build started on `date`
-        - mvn package
-
+  pre_build:
+    commands:
+      - aws s3 cp s3://clmw-api-hosting/application.yml ./src/main/resources/application.yml
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn package
 artifacts:
   files:
-    - target/*.jar
+    - target/project2_api-1.0-SNAPSHOT.jar
   discard-paths: yes

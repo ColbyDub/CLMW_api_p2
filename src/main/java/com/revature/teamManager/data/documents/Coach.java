@@ -3,7 +3,6 @@ package com.revature.teamManager.data.documents;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -22,8 +21,6 @@ public class Coach {
 
     public Coach() {
     }
-
-
 
     public Coach(String id, String coachName, String username, String password, String teamName, String sport, List<String[]> players) {
         this.id = id;
@@ -83,6 +80,7 @@ public class Coach {
         this.sport = sport;
     }
 
+
     public List<String[]> getPlayers() {
         return players;
     }
@@ -96,6 +94,7 @@ public class Coach {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coach coach = (Coach) o;
+
         return Objects.equals(id, coach.id) && Objects.equals(coachName, coach.coachName) && Objects.equals(username, coach.username) && Objects.equals(password, coach.password) && Objects.equals(teamName, coach.teamName) && Objects.equals(sport, coach.sport) && Objects.equals(players, coach.players);
     }
 
