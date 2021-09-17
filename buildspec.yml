@@ -17,4 +17,4 @@ phases:
 
 artifacts:
   files:
-    - target/project2_api-1.0-SNAPSHOT.jar
+    - project2_api-1.0-SNAPSHOT.jar
