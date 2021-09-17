@@ -2,11 +2,7 @@ package com.revature.teamManager.web.controllers;
 
 import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.services.PlayerService;
-import com.revature.teamManager.web.dtos.AddToProfile;
-import com.revature.teamManager.web.dtos.Credentials;
-import com.revature.teamManager.web.dtos.Offer;
-import com.revature.teamManager.web.dtos.Principal;
-import com.revature.teamManager.web.dtos.PlayerDTO;
+import com.revature.teamManager.web.dtos.*;
 import com.revature.teamManager.web.util.security.Secured;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -79,4 +75,9 @@ public class PlayerController {
         return player.getExercises();
     }
 
+    @PutMapping(value = "/exercise/{operation}")
+    public Player modifyExercise(@RequestBody ModifyExercise changedExercise, @PathVariable("operation") String operation){
+        Player foundPlayer = playerService.modifyExercise(changedExercise, operation);
+        return foundPlayer;
+    }
 }
