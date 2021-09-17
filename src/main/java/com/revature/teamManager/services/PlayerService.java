@@ -80,7 +80,7 @@ public class PlayerService {
     public void removeTeam(String playerUsername) {
         Player updateOfferPlayer = playerRepository.findPlayerByUsername(playerUsername);
         //FIX THIS.. Throw if updateOfferPlayer is null.
-        updateOfferPlayer.setTeamName("");
+        updateOfferPlayer.setTeamName(null);
         playerRepository.save(updateOfferPlayer);
     }
 
