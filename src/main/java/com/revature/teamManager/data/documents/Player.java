@@ -16,6 +16,7 @@ public class Player {
     private String[] invitations;
     private List<String> offers = new ArrayList<String>();
     private List<String> exercises = new ArrayList<String>();
+    private List<String> completedExercises = new ArrayList<String>();
     private List<String> sports = new ArrayList<String>();
     private List<Skills> skills = new ArrayList<Skills>();
 
@@ -133,4 +134,9 @@ public class Player {
     public void setExercises(List<String> exercises) {
         this.exercises = exercises;
     }
+
+    public List<String> getCompletedExercises() { return completedExercises; }
+
+    public void setCompletedExercises(List<String> completedExercises) { this.completedExercises = completedExercises; }
+
 }
