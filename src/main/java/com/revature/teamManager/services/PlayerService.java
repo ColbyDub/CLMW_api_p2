@@ -1,6 +1,4 @@
 package com.revature.teamManager.services;
-
-import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.documents.Skills;
 import com.revature.teamManager.data.repos.PlayerRepository;
@@ -13,7 +11,7 @@ import com.revature.teamManager.web.dtos.Principal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class PlayerService {
