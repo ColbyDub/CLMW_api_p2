@@ -8,6 +8,8 @@ import java.util.List;
 
 import java.util.List;
 
+import java.util.List;
+
 @Repository
 public interface PlayerRepository extends MongoRepository<Player, String> {
 
@@ -15,6 +17,8 @@ public interface PlayerRepository extends MongoRepository<Player, String> {
 
     Player findPlayerByUsernameAndPassword(String username, String password);
     Player findPlayerByUsername(String username);
+    @Query(value="{}",fields="{'username' : 1, 'name' : 1, 'teamName' : 1, 'invitations' : 1}")
+    List <Player> findAll();
 
     @Query(value="{}",fields="{'username' : 1, 'name' : 1, 'sports' : 1, 'teamName' : 1, 'skills' : 1, 'invitations' : 1}")
     List <Player> findAll();

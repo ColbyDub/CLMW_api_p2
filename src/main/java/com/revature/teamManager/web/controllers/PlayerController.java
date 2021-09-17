@@ -18,14 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-
 @RestController
 @RequestMapping("/players")
 public class PlayerController {
@@ -64,11 +56,12 @@ public class PlayerController {
     public List<Player> getAllUsersBySport(@PathVariable("sport") String sport) {
         return playerService.findPlayersBySport(sport);
     }
-	
+
 	@GetMapping(produces = "application/json")
 	public List<Player> getAllUsers() {
 		return playerService.findAll();
 	}
+
 
     @Secured(allowedRoles = {"Player"})
     @GetMapping(value = "/user/{username}", produces = "application/json")
@@ -85,7 +78,5 @@ public class PlayerController {
 
         return player.getExercises();
     }
-
-
 
 }
