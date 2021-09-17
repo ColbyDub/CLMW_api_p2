@@ -11,10 +11,7 @@ phases:
     commands:
       - echo Build started on `date`
       - mvn package
-  post_build:
-    commands:
-      - mv target/project2_api-1.0-SNAPSHOT.jar CLMW_api_p2
-
 artifacts:
   files:
-    - project2_api-1.0-SNAPSHOT.jar
+    - target/project2_api-1.0-SNAPSHOT.jar
+  discard-paths: yes
