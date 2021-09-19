@@ -5,6 +5,7 @@ import com.revature.teamManager.data.repos.PlayerRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
+import com.revature.teamManager.util.exceptions.ResourceNotFoundException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
 import com.revature.teamManager.web.dtos.ModifyExercise;
 import com.revature.teamManager.web.dtos.Offer;
@@ -148,6 +149,47 @@ public class PlayerService {
         Player check = playerRepository.findPlayerByUsername(player.getUsername());
         if (check.getSports().contains(sport)){
             throw new ResourcePersistenceException("Duplicate data");
+        }
+        return true;
+    }
+
+    public Player deleteSkill(String username, String deleteSkill){
+        Player player = playerRepository.findPlayerByUsername(username);
+        if(deleteSkillValidation(player, deleteSkill)){
+            player.getSkills().removeIf(item -> item.getSkill().equals(deleteSkill));
+            playerRepository.save(player);
+        }
+        return null;
+    }
+
+    public boolean deleteSkillValidation(Player player, String deleteSkill){
+
+        if(deleteSkill == ""){
+            throw new InvalidRequestException("Invalid data");
+        }
+        boolean skillExists = player.getSkills().stream().anyMatch(item -> deleteSkill.equals(item.getSkill()));
+        if(!skillExists){
+            throw new ResourceNotFoundException();
+        }
+        return true;
+    }
+
+    public Player deleteSport(String username, String deleteSport){
+        Player player = playerRepository.findPlayerByUsername(username);
+        if(deleteSportValidation(player, deleteSport)){
+            player.getSports().removeIf(item -> item.equals(deleteSport));
+            playerRepository.save(player);
+        }
+        return null;
+    }
+
+    public boolean deleteSportValidation(Player player, String deleteSport){
+        if(deleteSport == ""){
+            throw new InvalidRequestException("Invalid data");
+        }
+        boolean sportExists = player.getSports().stream().anyMatch(item -> deleteSport.equals(item));
+        if(!sportExists){
+            throw new ResourceNotFoundException();
         }
         return true;
     }

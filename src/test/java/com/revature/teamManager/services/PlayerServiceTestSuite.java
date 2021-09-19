@@ -7,6 +7,7 @@ import com.revature.teamManager.data.repos.PlayerRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
+import com.revature.teamManager.util.exceptions.ResourceNotFoundException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
 import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.dtos.Principal;
@@ -295,6 +296,90 @@ public class PlayerServiceTestSuite {
         assertEquals(player, result);
         verify(mockPlayerRepo, times(2)).findPlayerByUsername(any()); //addSkill calls skillValid, both call find
         verify(mockPlayerRepo, times(1)).save(any());
+    }
+
+    //deleteSkill
+    @Test
+    public void deleteSkill_withOneSkillInListReturnsPlayerWithEmptySkills_whenGivenValidValue(){
+        Player player = new Player("name", "username", "password", "sport");
+        Skills skill = new Skills("running");
+        player.getSkills().add(skill);
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        String deleteSkill = "running";
+
+        sut.deleteSkill("username", deleteSkill);
+
+        assertTrue("empty skills", player.getSkills().isEmpty());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+    }
+
+    @Test
+    public void deleteSkillValidation_throwsResourceNotFoundException_whenGivenNonExistentValue(){
+        Player player = new Player("name", "username", "password", "sport");
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        String deleteSkill = "running";
+
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, () -> sut.deleteSkillValidation(player, deleteSkill));
+
+        assertEquals("No resource found using provided search criteria.", e.getMessage());
+
+        verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
+    }
+
+    @Test
+    public void deleteSkillValidation_throwsInvalidRequestException_whenGivenEmptyValue(){
+
+        Player player = new Player("name", "username", "password", "sport");
+        String deleteSkill = "";
+
+        //act
+        InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.deleteSkillValidation(player, deleteSkill));
+
+        assertEquals("Invalid data", e.getMessage());
+
+        verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
+    }
+
+    //deleteSport
+    @Test
+    public void deleteSport_withOneSportInListReturnsPlayerWithEmptySports_whenGivenValidValue(){
+        Player player = new Player("name", "username", "password", "sport");
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        String deleteSport = "sport";
+
+        sut.deleteSport("username", deleteSport);
+
+        assertTrue("empty sports", player.getSports().isEmpty());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+    }
+
+    @Test
+    public void deleteSportValidation_throwsResourceNotFoundException_whenGivenNonExistentValue(){
+        Player player = new Player("name", "username", "password", "sport");
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        String deleteSport = "basketball";
+
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, () -> sut.deleteSportValidation(player, deleteSport));
+
+        assertEquals("No resource found using provided search criteria.", e.getMessage());
+
+        verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
+    }
+
+    @Test
+    public void deleteSportValidation_throwsInvalidRequestException_whenGivenEmptyValue(){
+
+        Player player = new Player("name", "username", "password", "sport");
+        String deleteSport = "";
+
+        //act
+        InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.deleteSportValidation(player, deleteSport));
+
+        assertEquals("Invalid data", e.getMessage());
+
+        verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
     }
 
     @Test

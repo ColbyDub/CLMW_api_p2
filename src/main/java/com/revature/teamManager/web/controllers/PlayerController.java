@@ -55,6 +55,16 @@ public class PlayerController {
         return playerService.findPlayersBySport(sport);
     }
 
+    @PutMapping(value="/skill/manage", produces = "application/json", consumes = "application/json")
+    public Player deleteSkill(@RequestBody AddToProfile addToProfile) {
+        return playerService.deleteSkill(addToProfile.getUsername(), addToProfile.getAddedValue());
+    }
+
+    @PutMapping(value="/sport/manage", produces = "application/json", consumes = "application/json")
+    public Player deleteSport(@RequestBody AddToProfile addToProfile) {
+        return playerService.deleteSport(addToProfile.getUsername(), addToProfile.getAddedValue());
+    }
+
 	@GetMapping(produces = "application/json")
 	public List<Player> getAllUsers() {
 		return playerService.findAll();
