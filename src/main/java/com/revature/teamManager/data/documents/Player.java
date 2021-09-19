@@ -3,6 +3,7 @@ package com.revature.teamManager.data.documents;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Document(collection = "players")
@@ -48,8 +49,11 @@ public class Player {
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", teamName='" + teamName + '\'' +
+                ", invitations=" + Arrays.toString(invitations) +
                 ", offers=" + offers +
                 ", exercises=" + exercises +
+                ", completedExercises=" + completedExercises +
                 ", sports=" + sports +
                 ", skills=" + skills +
                 '}';
