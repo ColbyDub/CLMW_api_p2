@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.teamManager.services.CoachService;
 import com.revature.teamManager.services.PlayerService;
 import com.revature.teamManager.services.RecruiterService;
-import com.revature.teamManager.services.UserService;
 import com.revature.teamManager.web.dtos.Credentials;
 import com.revature.teamManager.web.dtos.Principal;
 import com.revature.teamManager.web.util.security.TokenGenerator;
