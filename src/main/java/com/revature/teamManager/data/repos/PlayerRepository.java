@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
-
 @Repository
 public interface PlayerRepository extends MongoRepository<Player, String> {
     Player findPlayerByUsernameAndPassword(String username, String password);

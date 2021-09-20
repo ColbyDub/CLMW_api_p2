@@ -26,9 +26,9 @@ public class CoachController {
         return new CoachDTO(coach);
     }
 
-    @PostMapping(produces = "application/json", consumes = "application/json")
-    public Coach registerNewCoach(@RequestBody Coach coachCandidate) {
-        return coachService.register(coachCandidate);
+    @PostMapping(value="{pin}", produces = "application/json", consumes = "application/json")
+    public Coach registerNewCoach(@RequestBody Coach coachCandidate, @PathVariable String pin) {
+        return coachService.register(coachCandidate,pin);
     }
 
     @PutMapping(value = "/positions", consumes = "application/json")
