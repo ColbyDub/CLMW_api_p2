@@ -1,8 +1,10 @@
 package com.revature.teamManager.services;
 
 import com.revature.teamManager.data.documents.Coach;
+import com.revature.teamManager.data.documents.Pin;
 import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.documents.Recruiter;
+import com.revature.teamManager.data.repos.PinRepository;
 import com.revature.teamManager.data.repos.RecruiterRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
@@ -13,25 +15,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class RecruiterService {
     private RecruiterRepository recruiterRepository;
+    private PinRepository pinRepository;
     private PasswordUtils passwordUtils;
 
-    public RecruiterService(RecruiterRepository recruiterRepository, PasswordUtils passwordUtils){
+    public RecruiterService(RecruiterRepository recruiterRepository, PinRepository pinRepository, PasswordUtils passwordUtils){
         this.recruiterRepository = recruiterRepository;
+        this.pinRepository = pinRepository;
         this.passwordUtils = passwordUtils;
     }
 
     public Principal login(String username, String password){
-
         String encryptedPassword = passwordUtils.generateSecurePassword(password);
-        System.out.println("In login.. username "+username+"  pass "+password+"  encrypted pass "+encryptedPassword);
         Recruiter authRecruiter = recruiterRepository.findRecruiterByUsernameAndPassword(username,encryptedPassword);
+
         if(authRecruiter == null){
-            throw new AuthenticationException("Invlaid credentials provided!");
+            throw new AuthenticationException("Invalid credentials provided!");
         }
         return new Principal(authRecruiter);
     }
 
-    public Recruiter register(Recruiter recruiter) {
+    public Recruiter register(Recruiter recruiter, String pin) {
+        String encryptedPin = passwordUtils.generateSecurePin(pin);
+        Pin checkPin = pinRepository.findPinByEncryptedPin(encryptedPin);
+
+        if(checkPin == null || !checkPin.getType().equals("recruiter")){
+            throw new AuthenticationException("Invalid Pin");
+        }
+
         if (!isValid(recruiter)) {
             return null;
         }
