@@ -9,6 +9,7 @@ import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.util.exceptions.ResourceNotFoundException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
+import com.revature.teamManager.web.dtos.ModifyExercise;
 import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.dtos.Principal;
 import org.junit.jupiter.api.AfterEach;
@@ -564,5 +565,139 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(0)).save(any());
     }
 
+    @Test
+    public void updateOffers_extendsOffer_whenGivenValidOfferAndType() {
+        // Arrange
+        Player player = new Player();
+        player.setName("name");
+        player.setUsername("username");
+        player.setPassword("password");
+
+        Player updatedPlayer = new Player();
+        updatedPlayer.setName("name");
+        updatedPlayer.setUsername("username");
+        updatedPlayer.setPassword("password");
+        List<String> playerOffers = new ArrayList<>();
+        playerOffers.add("coach");
+        updatedPlayer.setOffers(playerOffers);
+
+        Offer newOffer = new Offer();
+        newOffer.setPlayerUsername("username");
+        newOffer.setCoachUsername("coach");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        Player actualUpdatedPlayer = sut.updateOffers(newOffer, "extend");
+
+        // Assert
+        assertEquals(actualUpdatedPlayer.toString(), updatedPlayer.toString());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+
+    }
+
+    @Test
+    public void updateOffers_removesOffer_whenGivenValidOfferAndType() {
+        // Arrange
+        Player player = new Player();
+        player.setName("name");
+        player.setUsername("username");
+        player.setPassword("password");
+        List<String> playerOffers = new ArrayList<>();
+        playerOffers.add("coach");
+        player.setOffers(playerOffers);
+
+        Player updatedPlayer = new Player();
+        updatedPlayer.setName("name");
+        updatedPlayer.setUsername("username");
+        updatedPlayer.setPassword("password");
+
+        Offer newOffer = new Offer();
+        newOffer.setPlayerUsername("username");
+        newOffer.setCoachUsername("coach");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        Player actualUpdatedPlayer = sut.updateOffers(newOffer, "rescind");
+
+        // Assert
+        assertEquals(actualUpdatedPlayer.toString(), updatedPlayer.toString());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+
+    }
+
+    @Test
+    public void modifyExercise_completesExercise_whenGivenValidExerciseAndType() {
+        // Arrange
+        List<String> exercises = new ArrayList<>();
+        exercises.add("exercise");
+
+        Player player = new Player();
+        player.setName("name");
+        player.setUsername("username");
+        player.setPassword("password");
+        player.setExercises(exercises);
+
+        Player updatedPlayer = new Player();
+        updatedPlayer.setName("name");
+        updatedPlayer.setUsername("username");
+        updatedPlayer.setPassword("password");
+        updatedPlayer.setCompletedExercises(exercises);
+
+        ModifyExercise input = new ModifyExercise();
+        input.setPlayerUsername("username");
+        input.setExercise("exercise");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        Player actualUpdatedPlayer = sut.modifyExercise(input, "complete");
+
+        // Assert
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+
+    }
+
+    @Test
+    public void modifyExercises_uncompletesExercise_whenGivenValidExerciseAndType() {
+        // Arrange
+        List<String> exercises = new ArrayList<>();
+        exercises.add("exercise");
+
+        Player player = new Player();
+        player.setName("name");
+        player.setUsername("username");
+        player.setPassword("password");
+        player.setExercises(new ArrayList<>());
+        player.setCompletedExercises(exercises);
+
+        Player updatedPlayer = new Player();
+        updatedPlayer.setName("name");
+        updatedPlayer.setUsername("username");
+        updatedPlayer.setPassword("password");
+        updatedPlayer.setExercises(exercises);
+
+        ModifyExercise input = new ModifyExercise();
+        input.setPlayerUsername("username");
+        input.setExercise("exercise");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        Player completedPlayer = sut.modifyExercise(input, "uncomplete");
+
+        // Assert
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+
+    }
 
 }
