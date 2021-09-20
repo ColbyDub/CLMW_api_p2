@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/players")
 public class PlayerController {
@@ -53,6 +55,16 @@ public class PlayerController {
         return playerService.findPlayersBySport(sport);
     }
 
+    @PutMapping(value="/skill/manage", produces = "application/json", consumes = "application/json")
+    public Player deleteSkill(@RequestBody AddToProfile addToProfile) {
+        return playerService.deleteSkill(addToProfile.getUsername(), addToProfile.getAddedValue());
+    }
+
+    @PutMapping(value="/sport/manage", produces = "application/json", consumes = "application/json")
+    public Player deleteSport(@RequestBody AddToProfile addToProfile) {
+        return playerService.deleteSport(addToProfile.getUsername(), addToProfile.getAddedValue());
+    }
+
 	@GetMapping(produces = "application/json")
 	public List<Player> getAllUsers() {
 		return playerService.findAll();
@@ -81,3 +93,4 @@ public class PlayerController {
         return foundPlayer;
     }
 }
+
