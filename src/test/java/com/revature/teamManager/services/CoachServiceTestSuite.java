@@ -3,6 +3,7 @@ package com.revature.teamManager.services;
 import com.revature.teamManager.data.documents.Coach;
 import com.revature.teamManager.data.documents.Player;
 import com.revature.teamManager.data.repos.CoachRepository;
+import com.revature.teamManager.data.repos.PinRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
@@ -23,13 +24,15 @@ public class CoachServiceTestSuite {
     CoachService sut;
 
     private CoachRepository mockCoachRepo;
+    private PinRepository mockPinRepo;
     private PasswordUtils passwordUtils;
 
     @BeforeEach
     public void beforeEachTest() {
         mockCoachRepo = mock(CoachRepository.class);
+        mockPinRepo = mock(PinRepository.class);
         passwordUtils = mock(PasswordUtils.class);
-        sut = new CoachService(mockCoachRepo, passwordUtils);
+        sut = new CoachService(mockCoachRepo, mockPinRepo, passwordUtils);
     }
 
     @AfterEach
@@ -211,7 +214,7 @@ public class CoachServiceTestSuite {
         when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
 
         // act
-        Coach actualResult = sut.register(validCoach);
+        Coach actualResult = sut.register(validCoach,"80HD");
 
         // assert
         verify(mockCoachRepo, times(1)).save(any());

@@ -1,6 +1,7 @@
 package com.revature.teamManager.services;
 
 import com.revature.teamManager.data.documents.Recruiter;
+import com.revature.teamManager.data.repos.PinRepository;
 import com.revature.teamManager.data.repos.RecruiterRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
@@ -21,14 +22,16 @@ public class RecruiterServiceTestSuite {
     RecruiterService sut;
 
     private RecruiterRepository mockRecruiterRepo;
+    private PinRepository mockPinRepo;
     private PasswordUtils passwordUtils;
 
     @BeforeEach
     public void beforeEachTest(){
         mockRecruiterRepo = mock(RecruiterRepository.class);
+        mockPinRepo = mock(PinRepository.class);
         passwordUtils = mock(PasswordUtils.class);
 
-        sut = new RecruiterService(mockRecruiterRepo,passwordUtils);
+        sut = new RecruiterService(mockRecruiterRepo, mockPinRepo, passwordUtils);
     }
 
     @AfterEach
@@ -159,7 +162,7 @@ public class RecruiterServiceTestSuite {
         when(mockRecruiterRepo.findRecruiterByUsername(any())).thenReturn(null);
 
         // act
-        Recruiter actualResult = sut.register(validRecruiter);
+        Recruiter actualResult = sut.register(validRecruiter, "20161337");
 
         // assert
         verify(mockRecruiterRepo, times(1)).save(any());
