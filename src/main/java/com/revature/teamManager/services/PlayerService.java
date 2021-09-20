@@ -26,7 +26,6 @@ public class PlayerService {
     }
 
     public boolean isValid(Player player){
-
         if(player.getName() == "" || player.getUsername() == "" || player.getPassword() == "" || player.getSports().isEmpty() || player.getPassword().length() <= 7){
             throw new InvalidRequestException("invalid user data");
         }
@@ -39,10 +38,9 @@ public class PlayerService {
     }
 
     public Player register(Player player){
-
         player.setPassword(passwordUtils.generateSecurePassword(player.getPassword()));
 
-        if(isValid(player) == true){
+        if(isValid(player)){
             return playerRepository.save(player);
 
         }

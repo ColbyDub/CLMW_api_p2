@@ -1,7 +1,9 @@
 package com.revature.teamManager.services;
 
 import com.revature.teamManager.data.documents.Coach;
+import com.revature.teamManager.data.documents.Pin;
 import com.revature.teamManager.data.repos.CoachRepository;
+import com.revature.teamManager.data.repos.PinRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
@@ -16,11 +18,13 @@ import java.util.List;
 public class CoachService {
 
     private final CoachRepository coachRepository;
+    private final PinRepository pinRepository;
     private final PasswordUtils passwordUtils;
 
     @Autowired
-    public CoachService(CoachRepository coachRepository, PasswordUtils passwordUtils){
+    public CoachService(CoachRepository coachRepository, PinRepository pinRepository, PasswordUtils passwordUtils){
         this.coachRepository = coachRepository;
+        this.pinRepository = pinRepository;
         this.passwordUtils = passwordUtils;
     }
 
@@ -105,7 +109,14 @@ public class CoachService {
         return true;
     }
 
-    public Coach register(Coach coach) {
+    public Coach register(Coach coach, String pin) {
+        String encryptedPin = passwordUtils.generateSecurePin(pin);
+        Pin checkPin = pinRepository.findPinByEncryptedPin(encryptedPin);
+
+        if(checkPin == null || !checkPin.getType().equals("coach")){
+            throw new AuthenticationException("Invalid Pin");
+        }
+
         if (isValid(coach)) {
             coach.setPassword(passwordUtils.generateSecurePassword(coach.getPassword()));
             return coachRepository.save(coach);

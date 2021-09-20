@@ -16,6 +16,8 @@ public class PasswordUtils {
 
     @Value("${encrypt.salt}")
     private String salt;
+    @Value("${encrypt.pinSalt")
+    private String pinSalt;
 
 
     public PasswordUtils() {
@@ -59,4 +61,8 @@ public class PasswordUtils {
         }
     }
 
+    public String generateSecurePin(String encryptedPin) {
+        byte[] securePassword = hash(encryptedPin.toCharArray(), pinSalt.getBytes());
+        return Base64.getEncoder().encodeToString(securePassword);
+    }
 }
