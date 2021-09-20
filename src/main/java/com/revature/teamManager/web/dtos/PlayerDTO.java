@@ -16,6 +16,7 @@ public class PlayerDTO {
     private List<String> exercises;
     private List<String> completedExercises = new ArrayList<String>();
     private List<Skills> skills = new ArrayList<Skills>();
+    private List<String> sports = new ArrayList<String>();
 
     public PlayerDTO() {
         super();
@@ -30,6 +31,7 @@ public class PlayerDTO {
         this.exercises = player.getExercises();
         this.completedExercises = player.getCompletedExercises();
         this.skills = player.getSkills();
+        this.sports = player.getSports();
     }
 
     public String getName() {
@@ -86,6 +88,14 @@ public class PlayerDTO {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public List<String> getSports() {
+        return sports;
+    }
+
+    public void setSports(List<String> sports) {
+        this.sports = sports;
     }
 
     @Override
