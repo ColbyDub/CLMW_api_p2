@@ -156,17 +156,4 @@ public class Player {
 
     public void setCompletedExercises(List<String> completedExercises) { this.completedExercises = completedExercises; }
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", offers=" + offers +
-                ", exercises=" + exercises +
-                ", sports=" + sports +
-                ", skills=" + skills +
-                '}';
-    }
 }
