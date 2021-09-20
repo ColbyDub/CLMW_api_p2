@@ -35,8 +35,11 @@ public class RecruiterService {
     }
 
     public Recruiter register(Recruiter recruiter, String pin) {
+        System.out.println(pin);
         String encryptedPin = passwordUtils.generateSecurePin(pin);
+        System.out.println(encryptedPin);
         Pin checkPin = pinRepository.findPinByEncryptedPin(encryptedPin);
+        System.out.println(checkPin);
 
         if(checkPin == null || !checkPin.getType().equals("recruiter")){
             throw new AuthenticationException("Invalid Pin");

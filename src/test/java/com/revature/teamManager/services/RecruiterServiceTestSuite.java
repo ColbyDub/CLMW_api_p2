@@ -1,9 +1,10 @@
 package com.revature.teamManager.services;
-
+import com.revature.teamManager.data.documents.Pin;
 import com.revature.teamManager.data.documents.Recruiter;
 import com.revature.teamManager.data.repos.PinRepository;
 import com.revature.teamManager.data.repos.RecruiterRepository;
 import com.revature.teamManager.util.PasswordUtils;
+import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
 import com.revature.teamManager.web.dtos.Principal;
 import org.junit.jupiter.api.AfterEach;
@@ -151,6 +152,28 @@ public class RecruiterServiceTestSuite {
     }
 
     @Test
+    public void register_throwsAuthenticationException_whenGivenInvalidPin() {
+        // arrange
+        Recruiter validRecruiter = new Recruiter();
+        validRecruiter.setName("Bob");
+        validRecruiter.setUsername("Bobby");
+        validRecruiter.setPassword("password");
+
+        when(mockRecruiterRepo.save(any())).thenReturn(validRecruiter);
+        when(mockRecruiterRepo.findRecruiterByUsername(any())).thenReturn(null);
+        when(passwordUtils.generateSecurePin(anyString())).thenReturn("invalid");
+
+        // act
+        AuthenticationException ae = assertThrows(AuthenticationException.class, () -> sut.register(validRecruiter,"invalid"));
+
+        // Assert
+        assertEquals("Invalid Pin", ae.getMessage());
+        verify(passwordUtils, times(1)).generateSecurePin(anyString());
+        verify(mockPinRepo, times(1)).findPinByEncryptedPin(anyString());
+    }
+
+
+    @Test
     public void register_returnsSuccessfully_whenGivenValidRecruiter() {
         // arrange
         Recruiter validRecruiter = new Recruiter();
@@ -160,15 +183,19 @@ public class RecruiterServiceTestSuite {
 
         when(mockRecruiterRepo.save(any())).thenReturn(validRecruiter);
         when(mockRecruiterRepo.findRecruiterByUsername(any())).thenReturn(null);
+        when(mockPinRepo.findPinByEncryptedPin(anyString())).thenReturn(new Pin("recruiter","any"));
+        when(passwordUtils.generateSecurePin(anyString())).thenReturn("any");
 
         // act
-        Recruiter actualResult = sut.register(validRecruiter, "20161337");
+        Recruiter actualResult = sut.register(validRecruiter, "valid pin");
 
         // assert
+        verify(mockPinRepo, times(1)).findPinByEncryptedPin(any());
         verify(mockRecruiterRepo, times(1)).save(any());
+        verify(passwordUtils,times(1)).generateSecurePin(anyString());
+        verify(passwordUtils,times(1)).generateSecurePassword(any());
         assertEquals(validRecruiter,actualResult);
     }
-
 
 
     @Test

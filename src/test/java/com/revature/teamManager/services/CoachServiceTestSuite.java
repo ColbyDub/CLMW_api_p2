@@ -1,7 +1,7 @@
 package com.revature.teamManager.services;
 
 import com.revature.teamManager.data.documents.Coach;
-import com.revature.teamManager.data.documents.Player;
+import com.revature.teamManager.data.documents.Pin;
 import com.revature.teamManager.data.repos.CoachRepository;
 import com.revature.teamManager.data.repos.PinRepository;
 import com.revature.teamManager.util.PasswordUtils;
@@ -202,6 +202,28 @@ public class CoachServiceTestSuite {
     }
 
     @Test
+    public void register_throwsAuthenticationException_whenGivenInvalidPin() {
+        // arrange
+        Coach validCoach = new Coach();
+        validCoach.setCoachName("Bob");
+        validCoach.setUsername("Bobby");
+        validCoach.setPassword("password");
+        validCoach.setSport("Basketball");
+        validCoach.setTeamName("Fighting TypeScripts");
+        when(mockCoachRepo.save(any())).thenReturn(validCoach);
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
+        when(passwordUtils.generateSecurePin(anyString())).thenReturn("invalid");
+
+        // act
+        AuthenticationException ae = assertThrows(AuthenticationException.class, () -> sut.register(validCoach,"invalid"));
+
+        // Assert
+        assertEquals("Invalid Pin", ae.getMessage());
+        verify(passwordUtils, times(1)).generateSecurePin(anyString());
+        verify(mockPinRepo, times(1)).findPinByEncryptedPin(anyString());
+    }
+
+    @Test
     public void register_returnsSuccessfully_whenGivenValidCoach() {
         // arrange
         Coach validCoach = new Coach();
@@ -212,11 +234,16 @@ public class CoachServiceTestSuite {
         validCoach.setTeamName("Fighting TypeScripts");
         when(mockCoachRepo.save(any())).thenReturn(validCoach);
         when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
+        when(mockPinRepo.findPinByEncryptedPin(anyString())).thenReturn(new Pin("coach","any"));
+        when(passwordUtils.generateSecurePin(anyString())).thenReturn("any");
 
         // act
-        Coach actualResult = sut.register(validCoach,"80HD");
+        Coach actualResult = sut.register(validCoach,"valid pin");
 
         // assert
+        verify(mockPinRepo, times(1)).findPinByEncryptedPin(any());
+        verify(passwordUtils,times(1)).generateSecurePin(anyString());
+        verify(passwordUtils,times(1)).generateSecurePassword(any());
         verify(mockCoachRepo, times(1)).save(any());
         assertEquals(validCoach,actualResult);
     }
