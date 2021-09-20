@@ -7,7 +7,9 @@ import com.revature.teamManager.data.repos.PlayerRepository;
 import com.revature.teamManager.util.PasswordUtils;
 import com.revature.teamManager.util.exceptions.AuthenticationException;
 import com.revature.teamManager.util.exceptions.InvalidRequestException;
+import com.revature.teamManager.util.exceptions.ResourceNotFoundException;
 import com.revature.teamManager.util.exceptions.ResourcePersistenceException;
+import com.revature.teamManager.web.dtos.ModifyExercise;
 import com.revature.teamManager.web.dtos.Offer;
 import com.revature.teamManager.web.dtos.Principal;
 import org.junit.jupiter.api.AfterEach;
@@ -16,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -295,6 +299,90 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).save(any());
     }
 
+    //deleteSkill
+    @Test
+    public void deleteSkill_withOneSkillInListReturnsPlayerWithEmptySkills_whenGivenValidValue(){
+        Player player = new Player("name", "username", "password", "sport");
+        Skills skill = new Skills("running");
+        player.getSkills().add(skill);
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        String deleteSkill = "running";
+
+        sut.deleteSkill("username", deleteSkill);
+
+        assertTrue("empty skills", player.getSkills().isEmpty());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+    }
+
+    @Test
+    public void deleteSkillValidation_throwsResourceNotFoundException_whenGivenNonExistentValue(){
+        Player player = new Player("name", "username", "password", "sport");
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        String deleteSkill = "running";
+
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, () -> sut.deleteSkillValidation(player, deleteSkill));
+
+        assertEquals("No resource found using provided search criteria.", e.getMessage());
+
+        verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
+    }
+
+    @Test
+    public void deleteSkillValidation_throwsInvalidRequestException_whenGivenEmptyValue(){
+
+        Player player = new Player("name", "username", "password", "sport");
+        String deleteSkill = "";
+
+        //act
+        InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.deleteSkillValidation(player, deleteSkill));
+
+        assertEquals("Invalid data", e.getMessage());
+
+        verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
+    }
+
+    //deleteSport
+    @Test
+    public void deleteSport_withOneSportInListReturnsPlayerWithEmptySports_whenGivenValidValue(){
+        Player player = new Player("name", "username", "password", "sport");
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        String deleteSport = "sport";
+
+        sut.deleteSport("username", deleteSport);
+
+        assertTrue("empty sports", player.getSports().isEmpty());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+    }
+
+    @Test
+    public void deleteSportValidation_throwsResourceNotFoundException_whenGivenNonExistentValue(){
+        Player player = new Player("name", "username", "password", "sport");
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        String deleteSport = "basketball";
+
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, () -> sut.deleteSportValidation(player, deleteSport));
+
+        assertEquals("No resource found using provided search criteria.", e.getMessage());
+
+        verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
+    }
+
+    @Test
+    public void deleteSportValidation_throwsInvalidRequestException_whenGivenEmptyValue(){
+
+        Player player = new Player("name", "username", "password", "sport");
+        String deleteSport = "";
+
+        //act
+        InvalidRequestException e = assertThrows(InvalidRequestException.class, () -> sut.deleteSportValidation(player, deleteSport));
+
+        assertEquals("Invalid data", e.getMessage());
+
+        verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
+    }
+
     @Test
     public void removeOffer_updatesPlayerOffers_whenGivenValidInformation() {
         // Arrange
@@ -475,6 +563,140 @@ public class PlayerServiceTestSuite {
         assertEquals(ire.getMessage(), "That player doesn't have that skill");
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
         verify(mockPlayerRepo, times(0)).save(any());
+    }
+
+    @Test
+    public void updateOffers_extendsOffer_whenGivenValidOfferAndType() {
+        // Arrange
+        Player player = new Player();
+        player.setName("name");
+        player.setUsername("username");
+        player.setPassword("password");
+
+        Player updatedPlayer = new Player();
+        updatedPlayer.setName("name");
+        updatedPlayer.setUsername("username");
+        updatedPlayer.setPassword("password");
+        List<String> playerOffers = new ArrayList<>();
+        playerOffers.add("coach");
+        updatedPlayer.setOffers(playerOffers);
+
+        Offer newOffer = new Offer();
+        newOffer.setPlayerUsername("username");
+        newOffer.setCoachUsername("coach");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        Player actualUpdatedPlayer = sut.updateOffers(newOffer, "extend");
+
+        // Assert
+        assertEquals(actualUpdatedPlayer.toString(), updatedPlayer.toString());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+
+    }
+
+    @Test
+    public void updateOffers_removesOffer_whenGivenValidOfferAndType() {
+        // Arrange
+        Player player = new Player();
+        player.setName("name");
+        player.setUsername("username");
+        player.setPassword("password");
+        List<String> playerOffers = new ArrayList<>();
+        playerOffers.add("coach");
+        player.setOffers(playerOffers);
+
+        Player updatedPlayer = new Player();
+        updatedPlayer.setName("name");
+        updatedPlayer.setUsername("username");
+        updatedPlayer.setPassword("password");
+
+        Offer newOffer = new Offer();
+        newOffer.setPlayerUsername("username");
+        newOffer.setCoachUsername("coach");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        Player actualUpdatedPlayer = sut.updateOffers(newOffer, "rescind");
+
+        // Assert
+        assertEquals(actualUpdatedPlayer.toString(), updatedPlayer.toString());
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+
+    }
+
+    @Test
+    public void modifyExercise_completesExercise_whenGivenValidExerciseAndType() {
+        // Arrange
+        List<String> exercises = new ArrayList<>();
+        exercises.add("exercise");
+
+        Player player = new Player();
+        player.setName("name");
+        player.setUsername("username");
+        player.setPassword("password");
+        player.setExercises(exercises);
+
+        Player updatedPlayer = new Player();
+        updatedPlayer.setName("name");
+        updatedPlayer.setUsername("username");
+        updatedPlayer.setPassword("password");
+        updatedPlayer.setCompletedExercises(exercises);
+
+        ModifyExercise input = new ModifyExercise();
+        input.setPlayerUsername("username");
+        input.setExercise("exercise");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        Player actualUpdatedPlayer = sut.modifyExercise(input, "complete");
+
+        // Assert
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
+
+    }
+
+    @Test
+    public void modifyExercises_uncompletesExercise_whenGivenValidExerciseAndType() {
+        // Arrange
+        List<String> exercises = new ArrayList<>();
+        exercises.add("exercise");
+
+        Player player = new Player();
+        player.setName("name");
+        player.setUsername("username");
+        player.setPassword("password");
+        player.setExercises(new ArrayList<>());
+        player.setCompletedExercises(exercises);
+
+        Player updatedPlayer = new Player();
+        updatedPlayer.setName("name");
+        updatedPlayer.setUsername("username");
+        updatedPlayer.setPassword("password");
+        updatedPlayer.setExercises(exercises);
+
+        ModifyExercise input = new ModifyExercise();
+        input.setPlayerUsername("username");
+        input.setExercise("exercise");
+
+        when(mockPlayerRepo.findPlayerByUsername(any())).thenReturn(player);
+        when(mockPlayerRepo.save(any())).thenReturn(null);
+
+        // Act
+        Player completedPlayer = sut.modifyExercise(input, "uncomplete");
+
+        // Assert
+        verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
+        verify(mockPlayerRepo, times(1)).save(any());
 
     }
 

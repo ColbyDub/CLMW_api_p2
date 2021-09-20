@@ -3,7 +3,9 @@ package com.revature.teamManager.data.documents;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Document(collection = "players")
 public class Player {
@@ -11,7 +13,6 @@ public class Player {
     private String name;
     private String username;
     private String password;
-
     private String teamName;
     private String[] invitations;
     private List<String> offers = new ArrayList<String>();
@@ -21,6 +22,9 @@ public class Player {
     private List<Skills> skills = new ArrayList<Skills>();
 
     public Player(){
+        super();
+        this.offers = new ArrayList<>();
+        this.exercises = new ArrayList<>();
     }
 
     //Only used in unit tests
@@ -29,6 +33,8 @@ public class Player {
         this.name = name;
         this.username = username;
         this.password = password;
+        this.offers = new ArrayList<>();
+        this.exercises = new ArrayList<>();
         this.sports.add(sport);
     }
 
@@ -40,6 +46,14 @@ public class Player {
         this.teamName = teamName;
         this.offers = offers;
     }
+    public Player(String name, String username, String password, String[] sport, String teamName, List<String> offers) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.sports = Arrays.stream(sport).collect(Collectors.toList());
+        this.teamName = teamName;
+        this.offers = offers;
+    }
 
     @Override
     public String toString() {
@@ -48,8 +62,11 @@ public class Player {
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", teamName='" + teamName + '\'' +
+                ", invitations=" + Arrays.toString(invitations) +
                 ", offers=" + offers +
                 ", exercises=" + exercises +
+                ", completedExercises=" + completedExercises +
                 ", sports=" + sports +
                 ", skills=" + skills +
                 '}';
