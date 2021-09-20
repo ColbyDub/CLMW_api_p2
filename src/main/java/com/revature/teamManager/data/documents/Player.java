@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Document(collection = "players")
 public class Player {
@@ -38,6 +39,14 @@ public class Player {
         this.username = username;
         this.password = password;
         this.sports.add(sport);
+        this.teamName = teamName;
+        this.offers = offers;
+    }
+    public Player(String name, String username, String password, String[] sport, String teamName, List<String> offers) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.sports = Arrays.stream(sport).collect(Collectors.toList());
         this.teamName = teamName;
         this.offers = offers;
     }
