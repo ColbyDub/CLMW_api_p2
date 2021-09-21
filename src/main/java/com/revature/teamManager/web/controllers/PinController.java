@@ -14,6 +14,7 @@ public class PinController {
         this.pinService = pinService;
     }
 
+    //registers a pin for a coach account
     @PostMapping(produces = "application/json", consumes = "application/json")
     public Pin registerNewPin(@RequestBody Pin pin) {
         return pinService.register(pin);

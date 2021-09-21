@@ -183,7 +183,7 @@ public class PlayerServiceTestSuite {
         verify(mockPasswordUtils, times(1)).generateSecurePassword( any());
     }
 
-    //validSports tests
+    //sportValid tests
     @Test
     public void sportValid_returnsTrue_whenGivenValidValue(){
         Player player = new Player("name", "username", "password", "sport");
@@ -240,7 +240,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).save(any());
     }
 
-    //validSkills tests
+    //skillValid tests
     @Test
     public void skillValid_returnsTrue_whenGivenValidValue(){
 
@@ -284,7 +284,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
     }
 
-    //addSkill
+    //addSkill tests
     @Test
     public void addSkill_returnsPlayer_whenGivenValidValue() {
 
@@ -299,7 +299,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).save(any());
     }
 
-    //deleteSkill
+    //deleteSkill tests
     @Test
     public void deleteSkill_withOneSkillInListReturnsPlayerWithEmptySkills_whenGivenValidValue(){
         Player player = new Player("name", "username", "password", "sport");
@@ -315,6 +315,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).save(any());
     }
 
+    //deleteSkill validation tests
     @Test
     public void deleteSkillValidation_throwsResourceNotFoundException_whenGivenNonExistentValue(){
         Player player = new Player("name", "username", "password", "sport");
@@ -342,7 +343,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
     }
 
-    //deleteSport
+    //deleteSport tests
     @Test
     public void deleteSport_withOneSportInListReturnsPlayerWithEmptySports_whenGivenValidValue(){
         Player player = new Player("name", "username", "password", "sport");
@@ -356,6 +357,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).save(any());
     }
 
+    //deleteSport validation tests
     @Test
     public void deleteSportValidation_throwsResourceNotFoundException_whenGivenNonExistentValue(){
         Player player = new Player("name", "username", "password", "sport");
@@ -383,6 +385,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(0)).findPlayerByUsername(any());
     }
 
+    //removeOffer tests
     @Test
     public void removeOffer_updatesPlayerOffers_whenGivenValidInformation() {
         // Arrange
@@ -429,6 +432,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(0)).save(any());
     }
 
+    //getPlayerInfo tests
     @Test
     public void getPlayerInfo_ReturnsSuccessfully_whenGivenValidUsername() {
         // Arrange
@@ -462,6 +466,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(1)).findPlayerByUsername(any());
     }
 
+    //addExercise tests
     @Test
     public void addExercise_returnsTrue_WhenExercisesDontHaveAddedOne(){
         Player player = new Player();
@@ -498,6 +503,7 @@ public class PlayerServiceTestSuite {
         assertFalse(check);
     }
 
+    //rateSkill tests
     @Test
     public void rateSkill_updatesRepository_whenGivenValidInformation() {
         // Arrange
@@ -565,6 +571,7 @@ public class PlayerServiceTestSuite {
         verify(mockPlayerRepo, times(0)).save(any());
     }
 
+    // updateOffers tests
     @Test
     public void updateOffers_extendsOffer_whenGivenValidOfferAndType() {
         // Arrange
@@ -631,6 +638,7 @@ public class PlayerServiceTestSuite {
 
     }
 
+    //modifyExercise tests
     @Test
     public void modifyExercise_completesExercise_whenGivenValidExerciseAndType() {
         // Arrange

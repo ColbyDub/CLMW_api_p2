@@ -5,6 +5,7 @@ import com.revature.teamManager.data.documents.Coach;
 import java.util.List;
 import java.util.Objects;
 
+//this dto is used for the coach
 public class CoachDTO {
 
     private String coachName;

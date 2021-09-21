@@ -24,6 +24,7 @@ public class RecruiterService {
         this.passwordUtils = passwordUtils;
     }
 
+    //login as recruiter
     public Principal login(String username, String password){
         String encryptedPassword = passwordUtils.generateSecurePassword(password);
         Recruiter authRecruiter = recruiterRepository.findRecruiterByUsernameAndPassword(username,encryptedPassword);
@@ -34,6 +35,7 @@ public class RecruiterService {
         return new Principal(authRecruiter);
     }
 
+    //register a recruiter account
     public Recruiter register(Recruiter recruiter, String pin) {
         System.out.println(pin);
         String encryptedPin = passwordUtils.generateSecurePin(pin);
@@ -54,6 +56,7 @@ public class RecruiterService {
         return recruiterRepository.save(new Recruiter(recruiter.getName(), recruiter.getUsername(), encryptedPass));
     }
 
+    //check if recruiter register data is valid
     public boolean isValid(Recruiter recruiter) {
         if (recruiter.getName() == null || recruiter.getName().trim().equals("")){
             throw new InvalidRequestException("Name cannot be left blank");

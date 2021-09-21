@@ -1,5 +1,6 @@
 package com.revature.teamManager.web.dtos;
 
+//this dto is used to set an exercise as complete or incomplete
 public class ModifyExercise {
     private String playerUsername;
     private String exercise;

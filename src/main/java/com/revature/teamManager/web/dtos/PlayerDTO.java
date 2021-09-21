@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+//this dto is used for the players
 public class PlayerDTO {
 
     private String name;

@@ -7,6 +7,7 @@ import com.revature.teamManager.util.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+//this service is for the pin that is used by the coach service
 @Service
 public class PinService {
 
@@ -19,11 +20,13 @@ public class PinService {
         this.pinRepository = pinRepository;
     }
 
+    //registers pin
     public Pin register(Pin pin) {
         pin.setEncryptedPin(passwordUtils.generateSecurePin(pin.getEncryptedPin()));
         return pinRepository.save(pin);
     }
 
+    //checks the pin
     public Pin checkPin(String encryptedPin){
         System.out.println("CHECKING: "+encryptedPin);
         return pinRepository.findPinByEncryptedPin(encryptedPin);

@@ -2,6 +2,7 @@ package com.revature.teamManager.web.dtos;
 
 import java.util.Objects;
 
+//this dto is used as the credentials (username/password) for any user
 public class Credentials {
 
 
