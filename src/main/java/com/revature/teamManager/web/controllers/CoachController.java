@@ -20,22 +20,26 @@ public class CoachController {
         this.playerService = playerService;
     }
 
+    //return a coach provided their username
     @GetMapping(value="{username}", produces = "application/json")
     public CoachDTO getCoach(@PathVariable String username) {
         Coach coach = coachService.getCoach(username);
         return new CoachDTO(coach);
     }
 
+    //register a coach account
     @PostMapping(value="{pin}", produces = "application/json", consumes = "application/json")
     public Coach registerNewCoach(@RequestBody Coach coachCandidate, @PathVariable String pin) {
         return coachService.register(coachCandidate,pin);
     }
 
+    //assigns a position to a player for their team
     @PutMapping(value = "/positions", consumes = "application/json")
     public void assignPlayerPosition(@RequestBody AssignPositionRequest req) {
         coachService.assignPosition(req.getCoachUsername(), req.getPlayerUsername(), req.getPosition());
     }
 
+    //adds a player to a team
     @PutMapping(value = "/team", produces = "application/json", consumes = "application/json")
     public Coach addPlayer(@RequestBody Offer accepted) {
         playerService.removeOffer(accepted);
@@ -43,12 +47,14 @@ public class CoachController {
         return coachService.addPlayer(accepted.getCoachUsername(), accepted.getPlayerUsername());
     }
 
+    //removes a player from a team
     @PatchMapping(value = "/team/remove", produces = "application/json", consumes = "application/json")
     public Coach removePlayer(@RequestBody Offer remove) {
         playerService.removeTeam(remove.getPlayerUsername());
         return coachService.removePlayer(remove.getCoachUsername(), remove.getPlayerUsername());
     }
 
+    //assigns a workout to a player
     @Secured(allowedRoles = "Coach")
     @PatchMapping(value = "/assign/{username}", produces = "application/json", consumes = "application/json")
     public void assignWorkout(@RequestBody String exercise, @PathVariable String username){
@@ -59,6 +65,7 @@ public class CoachController {
         }
     }
 
+    //find the team that a player is on
     @GetMapping(value = "/player/{playerUsername}", produces = "application/json")
     public CoachDTO findPlayersTeam(@PathVariable String playerUsername) {
         Coach foundTeam = coachService.getTeamForPlayer(playerUsername);

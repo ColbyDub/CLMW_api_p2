@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims;
 
 import java.util.Objects;
 
+//this dto is used as the principal (id, username, password)
 public class Principal {
 
     private String id;

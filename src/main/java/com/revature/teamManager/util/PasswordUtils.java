@@ -19,7 +19,6 @@ public class PasswordUtils {
     @Value("${encrypt.pinSalt")
     private String pinSalt;
 
-
     public PasswordUtils() {
         Properties appProperties = new Properties();
         try {
@@ -61,6 +60,7 @@ public class PasswordUtils {
         }
     }
 
+    //generates pin for coaches
     public String generateSecurePin(String encryptedPin) {
         byte[] securePassword = hash(encryptedPin.toCharArray(), pinSalt.getBytes());
         return Base64.getEncoder().encodeToString(securePassword);

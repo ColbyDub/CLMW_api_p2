@@ -3,6 +3,7 @@ package com.revature.teamManager.web.dtos;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+//this dto is used for error response
 public class ErrorResponse {
 
     private int statusCode;

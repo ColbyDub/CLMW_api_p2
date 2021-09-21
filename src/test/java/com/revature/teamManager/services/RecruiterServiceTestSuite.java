@@ -40,6 +40,7 @@ public class RecruiterServiceTestSuite {
         sut = null;
     }
 
+    //tests isValid method
     @Test
     public void isValid_returnsTrue_whenGivenValidCourse() {
         // arrange
@@ -151,6 +152,7 @@ public class RecruiterServiceTestSuite {
 
     }
 
+    //tests register method
     @Test
     public void register_throwsAuthenticationException_whenGivenInvalidPin() {
         // arrange
@@ -197,7 +199,7 @@ public class RecruiterServiceTestSuite {
         assertEquals(validRecruiter,actualResult);
     }
 
-
+    //tests login method
     @Test
     public void login_returnsPrincipal_whenGivenValidRecruiter() {
         // arrange
