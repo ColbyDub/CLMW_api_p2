@@ -226,6 +226,28 @@ public class CoachServiceTestSuite {
     }
 
     @Test
+    public void register_throwsAuthenticationException_whenGivenInvalidPin() {
+        // arrange
+        Coach validCoach = new Coach();
+        validCoach.setCoachName("Bob");
+        validCoach.setUsername("Bobby");
+        validCoach.setPassword("password");
+        validCoach.setSport("Basketball");
+        validCoach.setTeamName("Fighting TypeScripts");
+        when(mockCoachRepo.save(any())).thenReturn(validCoach);
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
+        when(passwordUtils.generateSecurePin(anyString())).thenReturn("invalid");
+
+        // act
+        AuthenticationException ae = assertThrows(AuthenticationException.class, () -> sut.register(validCoach,"invalid"));
+
+        // Assert
+        assertEquals("Invalid Pin", ae.getMessage());
+        verify(passwordUtils, times(1)).generateSecurePin(anyString());
+        verify(mockPinRepo, times(1)).findPinByEncryptedPin(anyString());
+    }
+
+    @Test
     public void register_returnsSuccessfully_whenGivenValidCoach() {
         // arrange
         Coach validCoach = new Coach();

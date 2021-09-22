@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PinService {
 
-    private PasswordUtils passwordUtils;
-    private PinRepository pinRepository;
+    private final PasswordUtils passwordUtils;
+    private final PinRepository pinRepository;
 
     @Autowired
     public PinService(PinRepository pinRepository, PasswordUtils passwordUtils){
@@ -26,9 +26,8 @@ public class PinService {
         return pinRepository.save(pin);
     }
 
-    //checks the pin
+    //returns the pin if found in the db
     public Pin checkPin(String encryptedPin){
-        System.out.println("CHECKING: "+encryptedPin);
         return pinRepository.findPinByEncryptedPin(encryptedPin);
     }
 

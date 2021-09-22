@@ -34,12 +34,14 @@ public class CoachController {
     }
 
     //assigns a position to a player for their team
+    @Secured(allowedRoles = {"Coach"})
     @PutMapping(value = "/positions", consumes = "application/json")
     public void assignPlayerPosition(@RequestBody AssignPositionRequest req) {
         coachService.assignPosition(req.getCoachUsername(), req.getPlayerUsername(), req.getPosition());
     }
 
     //adds a player to a team
+    @Secured(allowedRoles = {"Player"})
     @PutMapping(value = "/team", produces = "application/json", consumes = "application/json")
     public Coach addPlayer(@RequestBody Offer accepted) {
         playerService.removeOffer(accepted);
@@ -48,6 +50,7 @@ public class CoachController {
     }
 
     //removes a player from a team
+    @Secured(allowedRoles = {"Coach","Player"})
     @PatchMapping(value = "/team/remove", produces = "application/json", consumes = "application/json")
     public Coach removePlayer(@RequestBody Offer remove) {
         playerService.removeTeam(remove.getPlayerUsername());
