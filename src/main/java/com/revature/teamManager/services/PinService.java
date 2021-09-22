@@ -20,7 +20,6 @@ public class PinService {
         this.pinRepository = pinRepository;
     }
 
-
     //registers pin
     public Pin register(Pin pin) {
         pin.setEncryptedPin(passwordUtils.generateSecurePin(pin.getEncryptedPin()));
