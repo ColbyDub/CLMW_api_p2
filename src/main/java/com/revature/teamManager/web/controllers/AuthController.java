@@ -30,6 +30,7 @@ public class AuthController {
         this.playerService = playerService;
     }
 
+    //login as coach
     @PostMapping(value="/coach",consumes = "application/json")
     public @ResponseBody Principal authenticateCoach(@RequestBody Credentials creds, HttpServletResponse resp) {
         Principal principal = coachService.login(creds.getUsername(), creds.getPassword());
@@ -38,6 +39,7 @@ public class AuthController {
         return principal;
     }
 
+    //login as recruiter
     @PostMapping(value="/recruiter",consumes = "application/json")
     public @ResponseBody Principal authenticateRecruiter(@RequestBody Credentials creds, HttpServletResponse resp) {
         Principal principal = recruiterService.login(creds.getUsername(), creds.getPassword());
@@ -46,6 +48,7 @@ public class AuthController {
         return principal;
     }
 
+    //login as player
     @PostMapping(value="/player",consumes = "application/json")
     public @ResponseBody Principal authenticatePlayer(@RequestBody Credentials creds, HttpServletResponse resp) {
         Principal principal = playerService.login(creds.getUsername(), creds.getPassword());

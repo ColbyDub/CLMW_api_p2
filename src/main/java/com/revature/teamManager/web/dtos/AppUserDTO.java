@@ -1,5 +1,6 @@
 package com.revature.teamManager.web.dtos;
 
+//this is a generic user dto
 public class AppUserDTO {
 
     private String id;

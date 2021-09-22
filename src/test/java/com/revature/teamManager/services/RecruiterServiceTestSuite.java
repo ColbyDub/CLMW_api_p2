@@ -40,6 +40,7 @@ public class RecruiterServiceTestSuite {
         sut = null;
     }
 
+    //tests isValid method
     @Test
     public void isValid_returnsTrue_whenGivenValidCourse() {
         // arrange
@@ -151,6 +152,29 @@ public class RecruiterServiceTestSuite {
 
     }
 
+    //tests register method
+    @Test
+    public void register_throwsAuthenticationException_whenGivenInvalidPin() {
+        // arrange
+        Recruiter validRecruiter = new Recruiter();
+        validRecruiter.setName("Bob");
+        validRecruiter.setUsername("Bobby");
+        validRecruiter.setPassword("password");
+
+        when(mockRecruiterRepo.save(any())).thenReturn(validRecruiter);
+        when(mockRecruiterRepo.findRecruiterByUsername(any())).thenReturn(null);
+        when(passwordUtils.generateSecurePin(anyString())).thenReturn("invalid");
+
+        // act
+        AuthenticationException ae = assertThrows(AuthenticationException.class, () -> sut.register(validRecruiter,"invalid"));
+
+        // Assert
+        assertEquals("Invalid Pin", ae.getMessage());
+        verify(passwordUtils, times(1)).generateSecurePin(anyString());
+        verify(mockPinRepo, times(1)).findPinByEncryptedPin(anyString());
+    }
+
+
     @Test
     public void register_throwsAuthenticationException_whenGivenInvalidPin() {
         // arrange
@@ -197,7 +221,11 @@ public class RecruiterServiceTestSuite {
         assertEquals(validRecruiter,actualResult);
     }
 
+<<<<<<< HEAD
 
+=======
+    //tests login method
+>>>>>>> 3a66a582ad99df2c7927d604588ea48e6a561bb0
     @Test
     public void login_returnsPrincipal_whenGivenValidRecruiter() {
         // arrange

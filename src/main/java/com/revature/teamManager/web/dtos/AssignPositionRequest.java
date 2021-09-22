@@ -1,5 +1,6 @@
 package com.revature.teamManager.web.dtos;
 
+//this dto is used to assign a position to a player on a team
 public class AssignPositionRequest {
 
     private String coachUsername;

@@ -28,10 +28,12 @@ public class CoachService {
         this.passwordUtils = passwordUtils;
     }
 
+    //returns list of players assigned to team
     public List<String[]> getTeamPlayers(String username) {
         return coachRepository.findCoachByUsername(username).getPlayers();
     }
 
+    //returns coach with given username
     public Coach getCoach(String coachUsername) {
         Coach result = coachRepository.findCoachByUsername(coachUsername);
 
@@ -42,6 +44,7 @@ public class CoachService {
         return result;
     }
 
+    //adds player to coaches team
     public Coach addPlayer(String coachUsername, String playerUsername) {
         Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
         List<String[]> players = toUpdate.getPlayers();
@@ -57,6 +60,7 @@ public class CoachService {
         return toUpdate;
     }
 
+    //removes player from coaches team
     public Coach removePlayer(String coachUsername, String playerUsername) {
         Coach toUpdate = coachRepository.findCoachByUsername(coachUsername);
         List<String[]> players = toUpdate.getPlayers();
@@ -80,6 +84,7 @@ public class CoachService {
         return toUpdate;
     }
 
+    //login as coach
     public Principal login(String username, String password){
 
         String encryptedPassword = passwordUtils.generateSecurePassword(password);
@@ -92,6 +97,7 @@ public class CoachService {
         return new Principal(authCoach);
     }
 
+    //assure register credentials are valid
     public boolean isValid(Coach coach) {
         if (coach.getCoachName().trim().equals("") || coach.getUsername().trim().equals("") ||
                 coach.getPassword().trim().equals("") || coach.getSport().trim().equals("") ||
@@ -109,6 +115,7 @@ public class CoachService {
         return true;
     }
 
+    //register coach
     public Coach register(Coach coach, String pin) {
         String encryptedPin = passwordUtils.generateSecurePin(pin);
         Pin checkPin = pinRepository.findPinByEncryptedPin(encryptedPin);
@@ -124,6 +131,7 @@ public class CoachService {
         return null;
     }
 
+    //assigns position to a player who is on the coaches team
     public void assignPosition(String coachUsername, String playerUsername, String position) {
         if (coachUsername == "" || playerUsername == "" || position == "" || coachUsername == null || playerUsername == null || position == null) {
             throw new InvalidRequestException("You must provide a coach username, player username, and position");
@@ -141,6 +149,7 @@ public class CoachService {
         coachRepository.save(toUpdate);
     }
 
+    //returns the team that a given player is on
     public Coach getTeamForPlayer(String username) {
         Coach foundTeam = coachRepository.findCoachByPlayersContaining(username);
 

@@ -17,6 +17,7 @@ public class RecruiterController {
         this.recruiterService = recruiterService;
     }
 
+    //registers a new recruiter account
     @PostMapping(value = "{pin}", produces = "application/json", consumes = "application/json")
     public Recruiter registerNewRecruiter(@RequestBody Recruiter recruiterCandidate, @PathVariable String pin) {
         return recruiterService.register(recruiterCandidate, pin);

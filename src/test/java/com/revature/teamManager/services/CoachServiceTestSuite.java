@@ -40,6 +40,7 @@ public class CoachServiceTestSuite {
         sut = null;
     }
 
+    //test isValid method
     @Test
     public void isValid_returnsTrue_whenGivenValidCoach() {
         // arrange
@@ -201,6 +202,29 @@ public class CoachServiceTestSuite {
 
     }
 
+    //test register method
+    @Test
+    public void register_throwsAuthenticationException_whenGivenInvalidPin() {
+        // arrange
+        Coach validCoach = new Coach();
+        validCoach.setCoachName("Bob");
+        validCoach.setUsername("Bobby");
+        validCoach.setPassword("password");
+        validCoach.setSport("Basketball");
+        validCoach.setTeamName("Fighting TypeScripts");
+        when(mockCoachRepo.save(any())).thenReturn(validCoach);
+        when(mockCoachRepo.findCoachByUsername(any())).thenReturn(null);
+        when(passwordUtils.generateSecurePin(anyString())).thenReturn("invalid");
+
+        // act
+        AuthenticationException ae = assertThrows(AuthenticationException.class, () -> sut.register(validCoach,"invalid"));
+
+        // Assert
+        assertEquals("Invalid Pin", ae.getMessage());
+        verify(passwordUtils, times(1)).generateSecurePin(anyString());
+        verify(mockPinRepo, times(1)).findPinByEncryptedPin(anyString());
+    }
+
     @Test
     public void register_throwsAuthenticationException_whenGivenInvalidPin() {
         // arrange
@@ -248,6 +272,7 @@ public class CoachServiceTestSuite {
         assertEquals(validCoach,actualResult);
     }
 
+    //test login method
     @Test
     public void login_returnsSuccessfully_whenGivenValidCredentials() {
         // Arrange
@@ -285,6 +310,7 @@ public class CoachServiceTestSuite {
         verify(mockCoachRepo, times(1)).findCoachByUsernameAndPassword(any(), any());
     }
 
+    //test assignPosition method
     @Test
     public void assignPosition_callsRepositoryMethods_whenGivenValidInformation() {
         // Arrange
@@ -312,6 +338,7 @@ public class CoachServiceTestSuite {
 
     }
 
+    //test addPlayer method
     @Test
     public void addPlayer_returnsSuccessfully_WhenGivenUsernameAndPassword() {
         // Arrange
@@ -344,6 +371,7 @@ public class CoachServiceTestSuite {
 
     }
 
+    //test assignPosition method
     @Test
     public void assignPosition_throwsInvalidRequestException_whenGivenEmptyCoachUsername() {
         // Arrange
@@ -377,6 +405,7 @@ public class CoachServiceTestSuite {
 
     }
 
+    //test addPlayer method
     @Test
     public void addPlayer_doesNotAddPlayer_ifPlayerAlreadyOnTeam() {
         // Arrange
@@ -401,6 +430,7 @@ public class CoachServiceTestSuite {
 
     }
 
+    //test getCoach method
     @Test
     public void getCoach_returnsSuccessfully_whenGivenValidUsername() {
         // Arrange
@@ -436,6 +466,7 @@ public class CoachServiceTestSuite {
 
     }
 
+    //test getTeamForPlayer method
     @Test
     public void getTeamForPlayer_returnsSuccessfully_whenGivenValidUsername() {
         // Arrange
